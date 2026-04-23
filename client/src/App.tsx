@@ -1,6 +1,13 @@
+import { Routes, Route } from 'react-router'
+import WritePage from './pages/WritePage'
+
+
 const App = () => {
-  const placeholder = 'placeholder'
-  return placeholder
+  return (
+    <Routes>
+      <Route path="/" element={<WritePage />} />
+    </Routes>
+  )
 }
 
 export default App
