@@ -12,4 +12,12 @@ export interface MemoryTypes {
   created_at: string
 }
 
+export interface SearchResult {
+  song_id: string 
+  song_name: string
+  artist: string 
+  album_name: string
+  album_art: string 
+}
+
 export type NewMemoryTypes = Omit<MemoryTypes, 'id' | 'created_at'>
