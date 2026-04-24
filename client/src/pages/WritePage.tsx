@@ -2,6 +2,7 @@ import { useState } from "react"
 import EmotionMenu from "../components/EmotionMenu"
 import SeasonMenu from "../components/SeasonMenu"
 import YearMenu from "../components/YearMenu"
+import styles from './css/WritePage.module.css'
 
 const WritePage = () => {
 const [emotion, setEmotion] = useState<string>('')
@@ -32,6 +33,7 @@ const [year, setYear] = useState<number>(2026)
         type="text"
         placeholder="enter a memory"
       />
+      <button className={styles['submission-btn']}>SUBMIT</button>
     </>
   )
 }
