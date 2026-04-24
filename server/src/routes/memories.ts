@@ -41,12 +41,12 @@ memoriesRouter.get('/:emotion', async (req:Request, res:Response) => {
 
 memoriesRouter.post('/', async (req: Request, res: Response) => {
   try {
-    const { song_id, song_name, artist, emotion, season, year, memory_fragment, wav_path } = req.body
+    const { song_id, song_name, album_name, artist, emotion, season, year, memory_fragment, wav_path } = req.body
     const dbResponse = await pool.query(`
-        INSERT INTO memories (song_id, song_name, artist, emotion, season, year, memory_fragment, wav_path) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        INSERT INTO memories (song_id, song_name, album_name, artist, emotion, season, year, memory_fragment, wav_path) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *;`, 
-        [song_id, song_name, artist, emotion, season, year, memory_fragment, wav_path]
+        [song_id, song_name, album_name, artist, emotion, season, year, memory_fragment, wav_path]
       )
     const newMemory = dbResponse.rows[0]
     res.status(201)
