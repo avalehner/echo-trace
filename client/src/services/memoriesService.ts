@@ -1,9 +1,9 @@
 import type { MemoryTypes, NewMemoryTypes } from "../types"
 
-export const getAllMemories = async (): Promise<MemoryTypes> => {
+export const getAllMemories = async (): Promise<MemoryTypes[]> => {
   const response = await fetch (`http://localhost:3000/api/memories`, {
     method: 'GET', 
-    headers: { 'Content-Type': 'appliction/json'}, 
+    headers: { 'Content-Type': 'application/json'}, 
   })
 
   if(!response.ok) throw new Error(`Server error: ${response.status}`)
@@ -12,7 +12,7 @@ export const getAllMemories = async (): Promise<MemoryTypes> => {
   return memoriesData
 }
 
-export const getMemoryByEmotion = async (emotion: string): Promise<MemoryTypes> => {
+export const getMemoryByEmotion = async (emotion: string): Promise<MemoryTypes[]> => {
   const response = await fetch(`http://localhost:3000/api/memories/${emotion}`, {
     method: 'GET', 
     headers: { 'Content-Type': 'application/json' }, 
@@ -33,6 +33,6 @@ export const createMemory = async (data: NewMemoryTypes): Promise<MemoryTypes> =
 
   if(!response.ok) throw new Error(`Server error: ${response.status}`)
   
-  const newMemoryData = response.json()
+  const newMemoryData = await response.json()
   return newMemoryData
 }
