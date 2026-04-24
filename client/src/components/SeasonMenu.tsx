@@ -10,6 +10,7 @@ const SeasonMenu = ({season, setSeason}: SeasonMenuProps) => {
   return (
     <div className={styles['emotion-menu-container']}>
       <select className={styles['emotion-menu']} value={season} onChange={(e) => setSeason(e.target.value)}>
+        <option value="" disabled>select season</option>
         <option value="spring">spring</option>
         <option value="summer">summer</option>
         <option value="fall">fall</option>

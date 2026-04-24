@@ -9,6 +9,7 @@ const EmotionMenu = ({ emotion, setEmotion}: EmotionMenuProps) => {
   return (
     <div className={styles['emotion-menu-container']}>
       <select className={styles['emotion-menu']} value={emotion} onChange={(e)=> setEmotion(e.target.value)}>
+        <option value="" disabled>select emotion</option>
         <option value="excited">excited</option>
         <option value="nostalgic">nostalgic</option>
         <option value="heartbroken">heartbroken</option>
