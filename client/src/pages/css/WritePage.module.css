@@ -5,3 +5,8 @@
 .song-result {
   border: 1px solid black; 
 }
+
+.selected-song-result {
+  border: 1px solid green;  
+  background: rgb(186, 228, 186); 
+}

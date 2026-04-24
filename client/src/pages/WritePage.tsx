@@ -4,16 +4,18 @@ import SeasonMenu from "../components/SeasonMenu"
 import YearMenu from "../components/YearMenu"
 import styles from './css/WritePage.module.css'
 import { searchSongs } from "../services/spotifyService" 
+import { createMemory } from "../services/memoriesService"
 import type { SearchResult } from "../types"
 // import { getAllMemories, getMemoryByEmotion, createMemory } from "../services/memoriesService"
 
 const WritePage = () => {
 const [searchQuery, setSearchQuery] = useState<string>('')
 const [searchResults, setSearchResults] = useState<SearchResult[]>([])
+const [selectedSong, setSelectedSong] = useState<SearchResult | null>(null)
 const [emotion, setEmotion] = useState<string>('')
 const [season, setSeason] = useState<string>('')
 const [memoryFragment, setMemoryFragement] = useState<string>('')
-const [year, setYear] = useState<number>(2026)
+const [year, setYear] = useState<number>(0)
 const [searching, setSearching] = useState<boolean>(false)
 const [searchingMessage, setSearchingMessage] = useState<string>('')
 const [submitting, setSubmitting] = useState<boolean>(false)
@@ -33,29 +35,58 @@ const getSongs = async () => {
   }
 }
 
-const renderSongs = (searchResult: SearchResult[]) => {
-  return searchResult.map((result)=> {
-    return (
-      <>
-        <div className={styles['song-result']}>
-          <p>{result.song_name}</p>
-          <p>{result.album_name}</p>
-          <p>{result.artist}</p>
-        </div>
-      </>
-    )
-  })
+const handleSelectedSong = (song: SearchResult) => {
+  setSelectedSong(song)
+  setSearchResults([])
 }
 
-// const submitMemory = () => {
-//   setSubmitting(true)
+const renderSongs = (searchResult: SearchResult[]) => {
+  return searchResult.map((songResult)=> (
+    <div className={styles['song-result']} onClick={()=> handleSelectedSong(songResult)}>
+      <p>{songResult.song_name}</p>
+      <p>{songResult.album_name}</p>
+      <p>{songResult.artist}</p>
+    </div>
+    )
+  )
+}
 
-//   const memoryRequestObj = {
-    
-//   }
-// }
+const submitMemory = async () => {
+  setSubmitting(true)
 
-console.log(searchResults)
+  if(!selectedSong) return
+  const memoryRequestObj = {
+    song_id: selectedSong.song_id, 
+    song_name: selectedSong.song_name, 
+    album_name: selectedSong.album_name, 
+    artist: selectedSong.artist, 
+    emotion: emotion, 
+    season: season,
+    year: year, 
+    memory_fragment: memoryFragment 
+  }
+
+  try {
+    await createMemory(memoryRequestObj)
+    setSubmmittingMessage('memory saved :)')
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Error submitting memory'
+    setSubmmittingMessage(message)
+  } finally {
+    setSubmitting(false)
+    handleRefresh()
+  }
+}
+
+const handleRefresh = () => {
+  setSearchQuery('')
+  setSearchResults([])
+  setSelectedSong(null)
+  setEmotion('')
+  setSeason('')
+  setYear(0)
+  setMemoryFragement('')
+}
 
   return (
     <>
@@ -66,14 +97,24 @@ console.log(searchResults)
         onChange={(e)=> setSearchQuery(e.target.value)}
       />
       <button className={styles['search-btn']} onClick={getSongs}>{searching ? 'searching...' : 'SEARCH'}</button>
+      <button className={styles['refresh-search-btn']} onClick={()=> handleRefresh()}>REFRESH</button>
       {searchingMessage && <p>{searchingMessage}</p>}
-      <div className={styles['song-result-container']}>{renderSongs(searchResults)}</div>
+      <div className={styles['song-result-container']}>
+        {selectedSong ? (
+          <div className={styles['selected-song-result']}>
+            <p>{selectedSong.song_name}</p>
+            <p>{selectedSong.album_name}</p>
+            <p>{selectedSong.artist}</p>
+          </div>)  
+          : (renderSongs(searchResults))
+          }
+      </div>
       <p>listening to this song made me feel:</p>
       <EmotionMenu 
         emotion={emotion}
         setEmotion={setEmotion}
       />
-      <p>this song reminds me of: </p>
+      <p>this song reminds me of:</p>
       <SeasonMenu 
         season={season}
         setSeason={setSeason}
@@ -88,7 +129,7 @@ console.log(searchResults)
         value={memoryFragment}
         onChange={(e)=> setMemoryFragement(e.target.value)}
       />
-      <button className={styles['submission-btn']}>{submitting ? 'submitting': 'SUBMIT'}</button>
+      <button className={styles['submission-btn']} onClick={submitMemory}>{submitting ? 'submitting': 'SUBMIT'}</button>
       {submittingMessage && <p>{submittingMessage}</p>}
     </>
   )
