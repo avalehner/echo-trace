@@ -1,0 +1,7 @@
+.song-result-container {
+  display: flex; 
+}
+
+.song-result {
+  border: 1px solid black; 
+}

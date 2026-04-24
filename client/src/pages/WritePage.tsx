@@ -16,8 +16,8 @@ const [memoryFragment, setMemoryFragement] = useState<string>('')
 const [year, setYear] = useState<number>(2026)
 const [searching, setSearching] = useState<boolean>(false)
 const [searchingMessage, setSearchingMessage] = useState<string>('')
-// const [submitting, setSubmitting] = useState<boolean>(false)
-// const [submittingMessage, setSubmmittingMessage] = useState<string>('')
+const [submitting, setSubmitting] = useState<boolean>(false)
+const [submittingMessage, setSubmmittingMessage] = useState<string>('')
 
 const getSongs = async () => {
   setSearching(true)
@@ -67,7 +67,7 @@ console.log(searchResults)
       />
       <button className={styles['search-btn']} onClick={getSongs}>{searching ? 'searching...' : 'SEARCH'}</button>
       {searchingMessage && <p>{searchingMessage}</p>}
-      {renderSongs(searchResults)}
+      <div className={styles['song-result-container']}>{renderSongs(searchResults)}</div>
       <p>listening to this song made me feel:</p>
       <EmotionMenu 
         emotion={emotion}
