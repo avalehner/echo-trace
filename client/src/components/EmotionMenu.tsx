@@ -1,9 +1,14 @@
 import styles from './css/EmotionMenu.module.css'
 
-const EmotionMenu = () => {
+interface EmotionMenuProps {
+  emotion: string, 
+  setEmotion: (vallue: string) => void 
+}
+
+const EmotionMenu = ({ emotion, setEmotion}: EmotionMenuProps) => {
   return (
     <div className={styles['emotion-menu-container']}>
-      <select className={styles['emotion-menu']}>
+      <select className={styles['emotion-menu']} value={emotion} onChange={()=> setEmotion(emotion)}>
         <option value="excited">excited</option>
         <option value="nostalgic">nostalgic</option>
         <option value="heartbroken">heartbroken</option>
