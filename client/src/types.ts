@@ -20,4 +20,4 @@ export interface SearchResult {
   album_art: string 
 }
 
-export type NewMemoryTypes = Omit<MemoryTypes, 'id' | 'created_at'>
+export type NewMemoryTypes = Omit<MemoryTypes, 'id' | 'created_at' | 'wav_path'>
