@@ -52,9 +52,9 @@ const renderSongs = (searchResult: SearchResult[]) => {
 }
 
 const submitMemory = async () => {
+  if(!selectedSong) return
   setSubmitting(true)
 
-  if(!selectedSong) return
   const memoryRequestObj = {
     song_id: selectedSong.song_id, 
     song_name: selectedSong.song_name, 
@@ -69,12 +69,12 @@ const submitMemory = async () => {
   try {
     await createMemory(memoryRequestObj)
     setSubmmittingMessage('memory saved :)')
+    handleRefresh()
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Error submitting memory'
     setSubmmittingMessage(message)
   } finally {
     setSubmitting(false)
-    handleRefresh()
   }
 }
 
@@ -86,6 +86,8 @@ const handleRefresh = () => {
   setSeason('')
   setYear(0)
   setMemoryFragement('')
+  setSearchingMessage('')
+  setSubmmittingMessage('')
 }
 
   return (
@@ -97,7 +99,7 @@ const handleRefresh = () => {
         onChange={(e)=> setSearchQuery(e.target.value)}
       />
       <button className={styles['search-btn']} onClick={getSongs}>{searching ? 'searching...' : 'SEARCH'}</button>
-      <button className={styles['refresh-search-btn']} onClick={()=> handleRefresh()}>REFRESH</button>
+      {searchResults.length > 0 && <button className={styles['refresh-search-btn']} onClick={()=> handleRefresh()}>REFRESH</button>}
       {searchingMessage && <p>{searchingMessage}</p>}
       <div className={styles['song-result-container']}>
         {selectedSong ? (
