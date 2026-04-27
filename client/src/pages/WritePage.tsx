@@ -6,7 +6,6 @@ import styles from './css/WritePage.module.css'
 import { searchSongs } from "../services/spotifyService" 
 import { createMemory } from "../services/memoriesService"
 import type { SearchResult } from "../types"
-// import { getAllMemories, getMemoryByEmotion, createMemory } from "../services/memoriesService"
 
 const WritePage = () => {
 const [searchQuery, setSearchQuery] = useState<string>('')
@@ -42,7 +41,7 @@ const handleSelectedSong = (song: SearchResult) => {
 
 const renderSongs = (searchResult: SearchResult[]) => {
   return searchResult.map((songResult)=> (
-    <div className={styles['song-result']} onClick={()=> handleSelectedSong(songResult)}>
+    <div key={songResult.song_id} className={styles['song-result']} onClick={()=> handleSelectedSong(songResult)}>
       <p>{songResult.song_name}</p>
       <p>{songResult.album_name}</p>
       <p>{songResult.artist}</p>
