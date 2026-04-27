@@ -8,7 +8,6 @@ export interface MemoryTypes {
   season: string
   year: number
   memory_fragment: string
-  wav_path: string
   created_at: string
 }
 
