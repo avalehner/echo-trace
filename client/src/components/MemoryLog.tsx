@@ -1,13 +1,16 @@
 import type { MemoryTypes } from '../types'
 import styles from './css/MemoryLog.module.css'
+import { useNavigate } from 'react-router'
 
 interface MemoryLogProps {
   memory: MemoryTypes
 }
 
 const MemoryLog = ({ memory }: MemoryLogProps ) => {
+const navigate = useNavigate()
+
   return (
-    <div className={styles['memory-log-container']}>
+    <div className={styles['memory-log-container']} onClick={() => navigate(`/listen/${memory.id}`)}>
       <div className={styles['song-container']}>
         <p>song name:</p>
         <p>{memory.song_name}</p>
