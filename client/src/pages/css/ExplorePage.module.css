@@ -1,0 +1,9 @@
+.log-divider {
+  border: none; 
+  border-top: 1px dashed black; 
+  width: 100%; 
+}
+
+.year-menu-container, .season-menu-container, .emotion-menu-container {
+  display: flex; 
+}
