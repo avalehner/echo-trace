@@ -1,13 +1,15 @@
 import { useState } from "react"
+import { useNavigate } from "react-router"
 import EmotionMenu from "../components/EmotionMenu"
 import SeasonMenu from "../components/SeasonMenu"
 import YearMenu from "../components/YearMenu"
 import styles from './css/WritePage.module.css'
 import { searchSongs } from "../services/spotifyService" 
 import { createMemory } from "../services/memoriesService"
-import type { SearchResult } from "../types"
+import type { SearchResult, MemoryTypes } from "../types"
 
 const WritePage = () => {
+const navigate = useNavigate()
 const [searchQuery, setSearchQuery] = useState<string>('')
 const [searchResults, setSearchResults] = useState<SearchResult[]>([])
 const [selectedSong, setSelectedSong] = useState<SearchResult | null>(null)
@@ -19,6 +21,7 @@ const [searching, setSearching] = useState<boolean>(false)
 const [searchingMessage, setSearchingMessage] = useState<string>('')
 const [submitting, setSubmitting] = useState<boolean>(false)
 const [submittingMessage, setSubmmittingMessage] = useState<string>('')
+const [submittedMemory, setSubmittedMemory] = useState<MemoryTypes | null>(null)
 
 const getSongs = async () => {
   setSearching(true)
@@ -66,7 +69,8 @@ const submitMemory = async () => {
   }
 
   try {
-    await createMemory(memoryRequestObj)
+    const newMemory = await createMemory(memoryRequestObj)
+    setSubmittedMemory(newMemory)
     setSubmmittingMessage('memory saved :)')
     handleRefresh()
   } catch (error) {
@@ -132,6 +136,17 @@ const handleRefresh = () => {
       />
       <button className={styles['submission-btn']} onClick={submitMemory}>{submitting ? 'submitting': 'SUBMIT'}</button>
       {submittingMessage && <p>{submittingMessage}</p>}
+      {submittedMemory && (
+        <div>
+          <button onClick={() => navigate(`/listen/${submittedMemory.id}`)}>listen to your memory</button>
+          <button onClick={()=> {
+            setSubmittedMemory(null)
+            handleRefresh()
+          }}>
+            submit another memory
+          </button>
+        </div>
+      )}
     </>
   )
 }
