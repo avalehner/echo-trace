@@ -1,5 +1,6 @@
 import 'dotenv/config'
-import express, { Express } from 'express'
+import express from 'express'
+import type { Express } from 'express'
 import cors from 'cors'
 import memoriesRouter from './routes/memories'
 import searchRouter from './routes/search'
