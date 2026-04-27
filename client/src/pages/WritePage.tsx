@@ -14,7 +14,7 @@ const [selectedSong, setSelectedSong] = useState<SearchResult | null>(null)
 const [emotion, setEmotion] = useState<string>('')
 const [season, setSeason] = useState<string>('')
 const [memoryFragment, setMemoryFragement] = useState<string>('')
-const [year, setYear] = useState<number>(0)
+const [year, setYear] = useState<number | null >(null)
 const [searching, setSearching] = useState<boolean>(false)
 const [searchingMessage, setSearchingMessage] = useState<string>('')
 const [submitting, setSubmitting] = useState<boolean>(false)
@@ -51,7 +51,7 @@ const renderSongs = (searchResult: SearchResult[]) => {
 }
 
 const submitMemory = async () => {
-  if(!selectedSong) return
+  if(!selectedSong || !year || !emotion || !season) return
   setSubmitting(true)
 
   const memoryRequestObj = {
@@ -83,7 +83,7 @@ const handleRefresh = () => {
   setSelectedSong(null)
   setEmotion('')
   setSeason('')
-  setYear(0)
+  setYear(null)
   setMemoryFragement('')
   setSearchingMessage('')
   setSubmmittingMessage('')
