@@ -1,0 +1,18 @@
+.memory-log-container {
+  margin: 1rem 0; 
+}
+
+.song-container, 
+.artist-container,
+.album-container, 
+.emotion-container, 
+.season-container, 
+.year-container, 
+.memory-fragment-container {
+  display: flex; 
+}
+
+p {
+  margin: 0
+}
+

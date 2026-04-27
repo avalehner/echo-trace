@@ -8,18 +8,34 @@ interface MemoryLogProps {
 const MemoryLog = ({ memory }: MemoryLogProps ) => {
   return (
     <div className={styles['memory-log-container']}>
-      <p>song name:</p>
-      <p>{memory.song_name}</p>
-      <p>artist:</p>
-      <p>{memory.artist}</p>
-      <p>emotion:</p>
-      <p>{memory.emotion}</p>
-      <p>season:</p>
-      <p>{memory.season}</p>
-      <p>year:</p>
-      <p>{memory.year}</p>
-      <p>memory:</p>
-      <p>{memory.memory_fragment}</p>
+      <div className={styles['song-container']}>
+        <p>song name:</p>
+        <p>{memory.song_name}</p>
+      </div>
+      <div className={styles['album-container']}>
+        <p>album:</p>
+        <p>{memory.album_name}</p>
+      </div>
+      <div className={styles['artist-container']}>
+        <p>artist:</p>
+        <p>{memory.artist}</p>
+      </div>
+      <div className={styles['emotion-container']}>
+        <p>emotion:</p>
+        <p>{memory.emotion}</p>
+      </div>
+      <div className={styles['season-container']}>
+        <p>season:</p>
+        <p>{memory.season}</p>
+      </div>
+      <div className={styles['year-container']}>
+        <p>year:</p>
+        <p>{memory.year}</p>
+      </div>
+      <div className={styles['memory-fragment-container']}>
+        <p>memory:</p>
+        <p>{memory.memory_fragment}</p>
+      </div>
     </div>
   )
 }
