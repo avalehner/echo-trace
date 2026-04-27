@@ -1,4 +1,5 @@
-import { Router, Request, Response } from "express"
+import { Router } from "express"
+import type { Request, Response } from 'express'
 import type { SpotifyTrack, TrackResult } from "../types"
 
 const searchRouter = Router()
@@ -22,7 +23,6 @@ const getAccessToken = async () => {
 
 //routes
 searchRouter.get('/', async (req:Request, res: Response) => {
-
   try {
     const song = req.query.q
     const accessToken = await getAccessToken()
