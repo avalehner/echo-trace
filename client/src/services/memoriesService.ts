@@ -1,12 +1,6 @@
-import type { MemoryTypes, NewMemoryTypes } from "../types"
+import type { MemoryTypes, NewMemoryTypes, MemoryFiltersTypes } from "../types"
 
-interface MemoryFilters {
-  emotion?: string
-  season?: string
-  year?: number
-}
-
-export const getMemories = async (filters?: MemoryFilters): Promise<MemoryTypes[]> => {
+export const getMemories = async (filters?: MemoryFiltersTypes): Promise<MemoryTypes[]> => {
   const params = new URLSearchParams() //built in browser API specifically designed for building query strings. handles all the formatting and encoding (adding ? = & etc) and encodes special characters 
 
   if (filters?.emotion) params.append('emotion', filters.emotion)
