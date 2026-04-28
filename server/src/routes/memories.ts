@@ -44,6 +44,7 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
         json_string: JSON.stringify({
           emotion: memoryData.emotion, 
           season: memoryData.season, 
+          year: memoryData.year, 
           memory_fragment: memoryData.memory_fragment
         }) 
       })
