@@ -1,6 +1,5 @@
 import wave #built into Python, lets me read and write WAV files
 import numpy as np #manipulate audio samples as an array of numbers 
-import math #built into python, gives me access to math.floor for interval calculation 
 
 # To summarize the full encoding process in plain English:
 
