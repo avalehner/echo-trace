@@ -1,6 +1,5 @@
 import wave #built into Python, lets me read and write WAV files
 import numpy as np #manipulate audio samples as an array of numbers 
-import json #built into python, lets me parse and stringify JSON 
 import math #built into python, gives me access to math.floor for interval calculation 
 
 # To summarize the full encoding process in plain English:
@@ -72,14 +71,7 @@ def encode (wav_path, json_string):
 
   print(message_bits)
 
-  samples_30_seconds = frame_rate * 30
-
-  if len(message_bits) > samples_30_seconds: 
-    raise ValueError("Message too long")
-  
-  interval = math.floor(samples_30_seconds/len(message_bits)) #samples available dicided by bits to encode 
-
-  print(interval)
+  interval = 800 #fixed interval, makes decoding easier 
 
   #gives me the bit and the index of the bit 
   for i, bit in enumerate(message_bits): #enumerate gets both index and value while looping 
