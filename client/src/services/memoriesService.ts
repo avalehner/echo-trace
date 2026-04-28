@@ -48,19 +48,12 @@ export const deleteMemory = async (id: string): Promise<MemoryTypes> => {
   return deletedMemoryData
 }
 
-export const downloadWav = async (id:string): Promise<void> => {
+export const generateEncodedSong = async (id: string): Promise<string> => {
   const response = await fetch(`http://localhost:3000/api/memories/${id}/download`)
-
-  if (!response.ok) throw new Error(`Server error: ${response.status}`)
-
-  //triggering file download from fetch call 
+  if (!response.ok) throw new Error (`Server error: ${response.status}`)
+  
   const blob = await response.blob() //blob = binary large object - raw chunk of binary data (WAV file is in binary)
   const url = URL.createObjectURL(blob) //creates a temporary URL That points to the blob in memory
-  const a = document.createElement('a') //creates a hidden anchor taf in memory 
-  a.href = url //points the anchor at the blob URL 
-  a.download = `memory-${id}.wav` //tells the browser that clicking this link should download the file 
-  document.body.appendChild(a) //append to DOM (some browsers require this for a click)
-  a.click() //clicks the anchor, triggers the download if the user clikced the download linke 
-  document.body.removeChild(a) //remove from DOM 
-  URL.revokeObjectURL(url) //cleans up the temporary blob URL from memory
+
+  return url 
 }
