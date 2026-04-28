@@ -75,10 +75,7 @@ def decode (wav_path):
       message += character #appends result to message 
       extracted_bits = '' #reset for next 8 bits 
   
-  print(json.loads(message))
+  return(json.loads(message))
 
-
-if __name__ == '__main__': 
-   decode('../audio/e522eebb-8b0b-40c9-9049-a041e4c39fe6_encoded.wav')
   
 
