@@ -1,0 +1,16 @@
+.nav-bar {
+  list-style-type: none;
+  gap: 1rem; 
+  display: flex; 
+  margin: 1rem 0; 
+}
+
+nav a {
+  color: black; 
+  text-decoration: none; 
+}
+
+nav a:hover {
+  color: #97B48E; 
+  transition: all 0.1s ease; 
+}
