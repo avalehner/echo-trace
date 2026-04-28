@@ -10,6 +10,7 @@ const PlayMemoryPage = () => {
   const [memory, setMemory] = useState<MemoryTypes | null>(null)
   const [encodedSongUrl, setEncodedSongUrl] = useState<string | null>(null)
   const [isEncoding, setIsEncoding] = useState<boolean>(false)
+  const [isDecoding, setIsDecoding] = useState<boolean>(false)
   const [decodedMemory, setDecodedMemory] = useState<DecodedMemoryTypes | null>(null)
   const [displayedText, setDisplayedText] = useState<string>('')
 
@@ -39,6 +40,8 @@ const PlayMemoryPage = () => {
 
   const handleDecodeMessage = async (memoryId: string) => {
     try {
+      setIsDecoding(true)
+      await new Promise(resolve => setTimeout(resolve, 5000)) //makes async/await sleep for a duration
       const decoded = await decodeSong(memoryId)
       console.log('decoded', decoded)
       setDecodedMemory(decoded)
@@ -79,15 +82,15 @@ const PlayMemoryPage = () => {
         <p>{memory.artist}</p>
       </div>
       {!encodedSongUrl &&(<button onClick={()=> handleEncodedSong(memory.id)}>encode your memory</button>)}
-      {isEncoding && <p>encoding your song...</p>}
+      {isEncoding && <p>encoding your memory...</p>}
       {encodedSongUrl && (
         <div>
           <audio controls src={encodedSongUrl} onPlay={() =>handleDecodeMessage(memory.id)}/>
           <a href={encodedSongUrl} download={`memory-${id}.wav`}>download encoded song</a>
         </div>
       )}
-      {encodedSongUrl && !decodedMemory && <p>press play to decode your memory!</p>}
-      {/* {isDecoding && <p>decoding your message...</p>} */}
+      {encodedSongUrl && !decodedMemory && !isDecoding && <p>press play to decode your memory!</p>}
+      {isDecoding && !decodedMemory && <p>decoding your message...</p>}
       {decodedMemory && <p>{displayedText}</p>}
     </div> 
   )
