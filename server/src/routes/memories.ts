@@ -52,7 +52,7 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
     if(!encoderResponse.ok) throw new Error (`Encoder error: ${encoderResponse.status}`)
 
     const { output_path } = await encoderResponse.json()
-    res.download(output_path) //tells express to serve the file as a downloadble attachment to the browser 
+    res.sendFile(output_path) //serves file, frontend decides what to do with it
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     res.status(500)
