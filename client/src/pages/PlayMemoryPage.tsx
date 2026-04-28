@@ -3,10 +3,11 @@ import { useParams } from 'react-router'
 import type { MemoryTypes } from '../types'
 import { getMemoryById } from '../services/memoriesService'
 import MemoryLog from '../components/MemoryLog'
-import { downloadWav } from '../services/memoriesService'
+import { generateEncodedSong } from '../services/memoriesService'
 
 const PlayMemoryPage = () => {
   const [memory, setMemory] = useState<MemoryTypes | null>(null)
+  const [encodedSongUrl, setEncodedSongUrl] = useState<string | null>(null)
 
   const { id } = useParams()
 
@@ -18,13 +19,24 @@ const PlayMemoryPage = () => {
 
   if (!memory) return null 
 
+  const handleEncodedSong = async (memoryId: string) => {
+    const url = await generateEncodedSong(memoryId)
+    setEncodedSongUrl(url)
+  }
+
   return (
     <div>
       <MemoryLog 
         memory={memory}
       />
-      <button onClick={()=> downloadWav(memory.id)}>generate your memory</button>
-    </div>
+      <button onClick={()=> handleEncodedSong(memory.id)}>encode your memory</button>
+      {encodedSongUrl && (
+        <div>
+          <audio controls src={encodedSongUrl} />
+          <a href={encodedSongUrl}>download encoded song</a>
+        </div>
+      )}
+    </div> 
   )
 }
 
