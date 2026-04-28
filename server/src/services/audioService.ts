@@ -13,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 //path.dirname: strips filename and just gives path 
 
 //finds audio folder relative to services folder 
-const audioDir = path.resolve(__dirname, '../audio')
+export const audioDir = path.resolve(__dirname, '../audio')
 //path.resolve() takes a starting point and a relative path and joins them into an absolute path. says go up from services into audio folder 
 
 const execAsync = promisify(exec) //function when called returns a promise that resolves to { stdout, stderr }
