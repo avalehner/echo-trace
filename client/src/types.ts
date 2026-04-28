@@ -12,6 +12,7 @@ export interface MemoryTypes {
 }
 
 export type NewMemoryTypes = Omit<MemoryTypes, 'id' | 'created_at'>
+export type DecodedMemoryTypes = Omit<MemoryTypes, 'id' | 'song_id' | 'song_name' | 'album_name' | 'artist' | 'created_at'>
 
 export interface SearchResult {
   song_id: string 
