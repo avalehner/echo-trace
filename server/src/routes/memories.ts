@@ -2,23 +2,24 @@ import { Router } from 'express'
 import type { Request, Response } from 'express'
 import pool from "../db"
 import { downloadWav } from '../services/audioService'
+import fs from 'fs'
+import path from 'path'
+import { audioDir } from '../services/audioService'
+import { validate } from 'uuid'
 
 //create router instance 
 const memoriesRouter = Router()
-
 
 //download wav
 memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
   try {
     const { id } = req.params 
-
     const dbResponse = await pool.query(`
       SELECT *
       FROM memories 
       WHERE id = $1`, 
       [id]
     )
-
     const memoryData = dbResponse.rows[0]
 
     if (!memoryData) {
@@ -30,14 +31,81 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
     const songName = memoryData.song_name
     const artist = memoryData.artist
     const memoryId = memoryData.id 
-    const wavFilePath = await downloadWav(songName, artist, memoryId)
 
-    res.download(wavFilePath) //tells express to serve the file as a downloadble attachment to the browser 
+    const wavFilePath = path.resolve(audioDir, `${memoryId}.wav`) //construct file path before download 
+    if (!fs.existsSync(wavFilePath)) await downloadWav(songName, artist, memoryId) //downloads file only if it doesnt exist 
+
+    //call encoder 
+    const encoderResponse = await fetch(`http://localhost:5001/encode`, {
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify({
+        wav_path: wavFilePath, 
+        json_string: JSON.stringify({
+          emotion: memoryData.emotion, 
+          season: memoryData.season, 
+          memory_fragment: memoryData.memory_fragment
+        }) 
+      })
+    }) 
+
+    if(!encoderResponse.ok) throw new Error (`Encoder error: ${encoderResponse.status}`)
+
+    const { output_path } = await encoderResponse.json()
+    res.download(output_path) //tells express to serve the file as a downloadble attachment to the browser 
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     res.status(500)
       .json({ error: message })
   }
+})
+
+//get decoded message
+memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
+  try {   
+    const { id } = req.params 
+
+    //imports location of audio directory from audio service 
+    
+    //makes sure valid uuid input
+    if (!validate(id)) {
+      res.status(400).json({ error: 'Invalid id' })
+      return 
+    }
+    if (!fs.existsSync(audioDir)) {
+      res.status(500).json({ error: 'Audio directory not found' })
+      return 
+    }
+
+    //gets filepath for encoded wav file 
+    const encodedWavFilePath = path.resolve(audioDir, `${id}_encoded.wav`)
+
+    //makes sure encoded wav file exists
+    if (!fs.existsSync(encodedWavFilePath)) {
+      res.status(404).json({ error: 'Encoded WAV not found - has this memory been downloaded yet? '})
+      return
+    }
+
+    const decoderResponse = await fetch (`http://localhost:5001/decode`, {
+      method: 'POST', 
+      headers: {'Content-Type': 'application/json'}, 
+      body: JSON.stringify({
+        wav_path: encodedWavFilePath
+      })
+    })
+
+    if (!decoderResponse.ok) throw new Error(`Decoder error: ${decoderResponse.status}`)
+
+    const decodedMessage = await decoderResponse.json()
+    res.status(200)
+      .json(decodedMessage)
+
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    res.status(500)
+      .json({ error: message })
+  }
+
 })
 
 
