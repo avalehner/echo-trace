@@ -1,4 +1,4 @@
-import type { MemoryTypes, NewMemoryTypes, MemoryFiltersTypes } from "../types"
+import type { MemoryTypes, NewMemoryTypes, MemoryFiltersTypes, DecodedMemoryTypes } from "../types"
 
 export const getMemories = async (filters?: MemoryFiltersTypes): Promise<MemoryTypes[]> => {
   const params = new URLSearchParams() //built in browser API specifically designed for building query strings. handles all the formatting and encoding (adding ? = & etc) and encodes special characters 
@@ -56,4 +56,12 @@ export const generateEncodedSong = async (id: string): Promise<string> => {
   const url = URL.createObjectURL(blob) //creates a temporary URL That points to the blob in memory
 
   return url 
+}
+
+export const decodeSong = async(id: string): Promise<DecodedMemoryTypes> => {
+  const response = await fetch(`http://localhost:3000/api/memories/${id}/decode`)
+  if(!response.ok) throw new Error (`Server error: ${response.status}`)
+
+  const decodedMemoryData = await response.json()
+  return decodedMemoryData.decoded_message
 }
