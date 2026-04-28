@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .env
 server/src/audio
+
+#python bytecode cache files 
+__pycache__/
+*.pyc
