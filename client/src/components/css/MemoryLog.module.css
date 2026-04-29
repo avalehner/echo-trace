@@ -1,18 +1,113 @@
+/* MemoryLog.module.css */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+/* ─── Card wrapper ───────────────────────────────────────────── */
+
 .memory-log-container {
-  margin: 1rem 0; 
+  padding: 1rem; 
+  background: rgba(245, 239, 224, 0.5);
+  cursor: pointer;
+  /* border: 1px solid rgba(58, 48, 40, 0.3); */
+  margin: 1rem;
+  border-radius: 20px; 
 }
 
-.song-container, 
+/* ─── Shared row layout ──────────────────────────────────────── */
+
+.song-container,
+.album-container,
 .artist-container,
-.album-container, 
-.emotion-container, 
-.season-container, 
-.year-container, 
+.emotion-container,
+.season-container,
+.year-container,
 .memory-fragment-container {
-  display: flex; 
+  display: flex;
+  line-height: 1.8;
 }
 
-p {
-  margin: 0
+.song-container p,
+.album-container p,
+.artist-container p,
+.emotion-container p,
+.season-container p,
+.year-container p,
+.memory-fragment-container p {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  margin: 0;
+  padding: 0; 
+  letter-spacing: 0.03em;
 }
 
+/* ─── Labels ─────────────────────────────────────────────────── */
+
+.song-container p:first-child,
+.album-container p:first-child,
+.artist-container p:first-child,
+.emotion-container p:first-child,
+.season-container p:first-child,
+.year-container p:first-child,
+.memory-fragment-container p:first-child {
+  color: #7a4a20;
+  min-width: 72px;
+  flex-shrink: 0;
+}
+
+/* ─── Values ─────────────────────────────────────────────────── */
+
+.song-container p:last-child,
+.album-container p:last-child,
+.emotion-container p:last-child,
+.memory-fragment-container p:last-child {
+  color: #2a1000;
+}
+
+.artist-container p:last-child {
+  color: #b02878;
+}
+
+.season-container p:last-child,
+.year-container p:last-child {
+  color: #b02878;
+}
+
+.emotion-container p:last-child {
+  color: #a04a10;
+}
+
+.memory-fragment-container p:last-child {
+  /* font-style: italic; */
+  font-weight: 300;
+  color: #5a3010;
+  line-height: 1.55;
+}
+
+/* ─── Desktop ────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .memory-log-container {
+    padding: 16px 20px;
+  }
+
+  .song-container p,
+  .album-container p,
+  .artist-container p,
+  .emotion-container p,
+  .season-container p,
+  .year-container p,
+  .memory-fragment-container p {
+    font-size: 11px;
+  }
+
+  .song-container p:first-child,
+  .album-container p:first-child,
+  .artist-container p:first-child,
+  .emotion-container p:first-child,
+  .season-container p:first-child,
+  .year-container p:first-child,
+  .memory-fragment-container p:first-child {
+    min-width: 80px;
+  }
+}
