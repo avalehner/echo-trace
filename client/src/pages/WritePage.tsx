@@ -18,7 +18,7 @@ const [season, setSeason] = useState<string>('')
 const [memoryFragment, setMemoryFragement] = useState<string>('')
 const [year, setYear] = useState<number | null >(null)
 const [searching, setSearching] = useState<boolean>(false)
-const [searchingMessage, setSearchingMessage] = useState<string>('')
+// const [searchingMessage, setSearchingMessage] = useState<string>('')
 const [submitting, setSubmitting] = useState<boolean>(false)
 const [submittingMessage, setSubmmittingMessage] = useState<string>('')
 const [submittedMemory, setSubmittedMemory] = useState<MemoryTypes | null>(null)
@@ -28,10 +28,10 @@ const getSongs = async () => {
   try {
     const songs = await searchSongs(searchQuery)
     setSearchResults(songs)
-    setSearchingMessage('found songs :)')
+    console.log('found songs :)')
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
-    setSearchingMessage(message)
+    console.error(message)
   } finally {
     setSearching(false)
   }
@@ -89,57 +89,78 @@ const handleRefresh = () => {
   setSeason('')
   setYear(null)
   setMemoryFragement('')
-  setSearchingMessage('')
+  // setSearchingMessage('')
   setSubmmittingMessage('')
 }
 
   return (
     <>
-      <input 
-        type="text"
-        placeholder="enter title or artist"
-        value={searchQuery}
-        onChange={(e)=> setSearchQuery(e.target.value)}
-      />
-      <button className={styles['search-btn']} onClick={getSongs}>{searching ? 'searching...' : 'SEARCH'}</button>
-      {searchResults.length > 0 && <button className={styles['refresh-search-btn']} onClick={()=> handleRefresh()}>REFRESH</button>}
-      {searchingMessage && <p>{searchingMessage}</p>}
-      <div className={styles['song-result-container']}>
-        {selectedSong ? (
-          <div className={styles['selected-song-result']}>
-            <p>{selectedSong.song_name}</p>
-            <p>{selectedSong.album_name}</p>
-            <p>{selectedSong.artist}</p>
-          </div>)  
-          : (renderSongs(searchResults))
-          }
+      <h1 className={styles['title']}>echo-trace</h1>
+      <div className={styles['data-input-container']}>
+        <div className={styles['search-container']}>
+          <input 
+            className={styles['text-input']}
+            type="text"
+            placeholder="enter title or artist"
+            value={searchQuery}
+            onChange={(e)=> setSearchQuery(e.target.value)}
+          />
+          <button className={styles['write-page-btn']} onClick={getSongs}>{searching ? 'searching...' : 'SEARCH'}</button>
+        </div>
+        {searchResults.length > 0 && 
+          <div className={styles['refresh-btn-container']} >
+            <button 
+              className={styles['write-page-btn']} 
+              onClick={()=> handleRefresh()}>
+                REFRESH
+            </button>
+          </div>}
+        {/* {searchingMessage && <p>{searchingMessage}</p>} */}
+        <div className={selectedSong ? styles['selected-song-container'] : styles['song-results-container']}>
+          {selectedSong ? (
+            <div className={styles['selected-song-result']}>
+              <p>{selectedSong.song_name}</p>
+              <p>{selectedSong.album_name}</p>
+              <p>{selectedSong.artist}</p>
+            </div>)  
+            : (renderSongs(searchResults))}
+        </div>
+        <div className={styles['emotion-menu-container']}>
+          <p>listening to this song made me feel</p>
+          <EmotionMenu 
+            emotion={emotion}
+            setEmotion={setEmotion}
+          />
+        </div>
+        <div className={styles['season-menu-container']}>
+          <p>this song reminds me of</p>
+          <SeasonMenu 
+            season={season}
+            setSeason={setSeason}
+          />
+          <YearMenu 
+            year={year}
+            setYear={setYear}
+          />
+        </div>
+        <div className={styles['memory-input-container']}>
+          <input 
+            className={styles['text-input']}
+            type="text"
+            placeholder="enter a memory"
+            value={memoryFragment}
+            onChange={(e)=> setMemoryFragement(e.target.value)}
+          />
+        </div>
+        <div className={styles['submit-btn-container']}>
+          <button className={styles['submit-btn']} onClick={submitMemory}>{submitting ? 'submitting': 'SUBMIT'}</button>
+        </div>
       </div>
-      <p>listening to this song made me feel:</p>
-      <EmotionMenu 
-        emotion={emotion}
-        setEmotion={setEmotion}
-      />
-      <p>this song reminds me of:</p>
-      <SeasonMenu 
-        season={season}
-        setSeason={setSeason}
-      />
-     <YearMenu 
-        year={year}
-        setYear={setYear}
-     />
-      <input 
-        type="text"
-        placeholder="enter a memory"
-        value={memoryFragment}
-        onChange={(e)=> setMemoryFragement(e.target.value)}
-      />
-      <button className={styles['submission-btn']} onClick={submitMemory}>{submitting ? 'submitting': 'SUBMIT'}</button>
       {submittingMessage && <p>{submittingMessage}</p>}
       {submittedMemory && (
-        <div>
-          <button onClick={() => navigate(`/listen/${submittedMemory.id}`)}>listen to your memory</button>
-          <button onClick={()=> {
+        <div className={styles['after-submit-btns-container']}>
+          <button className={styles['write-page-btn']} onClick={() => navigate(`/listen/${submittedMemory.id}`)}>listen to your memory</button>
+          <button className={styles['write-page-btn']} onClick={()=> {
             setSubmittedMemory(null)
             handleRefresh()
           }}>

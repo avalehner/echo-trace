@@ -1,12 +1,309 @@
-.song-result-container {
-  display: flex; 
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+/* container  */
+
+.data-input-container {
+  /* border: 1px solid rgba(186, 87, 11, 0.2); */
+  border-radius: 25px; 
+  margin: 0 1rem; 
+  padding: 1.2rem 0 1.5rem; 
+  background: rgba(245, 239, 224, 0.25);
 }
 
+.search-container {
+  display: flex; 
+  gap: 0.5rem; 
+  justify-content: center; 
+  margin-top: 0.5rem;
+}
+
+.emotion-menu-container, .season-menu-container {
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  flex-direction: column; 
+  margin-top: 1rem; 
+  gap: 0.3rem; 
+}
+
+.emotion-menu-container select,
+.season-menu-container select {
+  font-family: 'DM Mono', monospace;
+  font-weight: 100; 
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: #352008;
+  background: rgba(245, 239, 224, 0.5);
+  border: 1px solid rgba(186, 87, 11, 0.55);
+  border-radius: 4px;
+  padding: 6px 26px 6px 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='4' viewBox='0 0 7 4'%3E%3Cpath d='M0 0l3.5 4 3.5-4z' fill='%23c8a060'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  cursor: pointer;
+  flex: 1;
+  width: 200px;
+  transition: border-color 0.15s ease;
+}
+
+.song-results-container {
+  padding: 0 1rem; 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  grid-template-rows: auto; /* First row fits content, second is 200px */
+  gap: 10px;
+}
+
+.memory-input-container {
+  display: flex; 
+  justify-content: center; 
+  margin-top: 1.5rem; 
+}
+
+.submit-btn-container {
+  display: flex; 
+  justify-content: center; 
+  margin-top: 1rem; 
+}
+
+.after-submit-btns-container {
+  margin-top: 1.2rem; 
+  display: flex; 
+  justify-content: center; 
+  gap: 0.2rem; 
+}
+
+/* inputs */
+.text-input {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #2a1000;
+  background: rgba(245, 239, 224, 0.5);
+  border: 1px solid rgba(58, 48, 40, 0.35);
+  border-radius: 4px;
+  padding: 8px 12px;
+  outline: none;
+  width: 200px; 
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.text-input::placeholder {
+  color: rgba(90, 48, 16, 0.5);
+}
+
+.text-input:focus {
+  border-color: rgba(58, 48, 40, 0.7);
+  background: rgba(245, 239, 224, 0.5);
+}
+
+/* text */
+
+.title {
+  text-align: center; 
+  color: #67310f; 
+  font-family: 'DM Mono', monospace;
+  font-weight: 100; 
+  margin: 1.4rem 0 1.8rem; 
+}
+
+.emotion-menu-container p, .season-menu-container p {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: #321b09;
+  margin: 0;
+  padding: 12px 14px 6px;
+}
+
+
+/* buttons */
+
+.write-page-btn, .submit-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #7a3a10;
+  background: rgba(245, 239, 224, 0.5);
+  border: 1px solid rgba(58, 48, 40, 0.35);
+  border-radius: 4px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.write-page-btn:hover {
+  background: rgba(255, 217, 180, 0.8);
+  border-color: rgba(58, 48, 40, 0.6);
+}
+
+.write-page-btn:active {
+  transform: scale(0.97);
+}
+
+.refresh-btn-container {
+  display: flex; 
+  justify-content: center; 
+  margin: 1rem; 
+}
+
+/* .submit-btn {
+  background: rgb(255, 235, 222, 0.5); 
+  border: 1px solid #45604766;
+  color: #7a3a10;
+} */
+
+/* ─── Individual song result row ─────────────────────────────── */
+
 .song-result {
-  border: 1px solid black; 
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid rgba(58, 48, 40, 0.2);
+  /* cursor: pointer; */
+  transition: background 0.15s ease;
+}
+
+.song-result:first-child {
+  border-top: 1px solid rgba(58, 48, 40, 0.2);
+}
+
+.song-result:hover {
+  background: rgba(245, 239, 224, 0.3);
+}
+
+.song-result p {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  margin: 0;
+  letter-spacing: 0.03em;
+  line-height: 1.7;
+  padding: 0; 
+}
+
+.song-result p:first-child {
+  color: #2a1000;
+  font-weight: 500;
+}
+
+.song-result p:nth-child(2) {
+  color: #7a4a20;
+}
+
+.song-result p:nth-child(3) {
+  color: #b02878;
+}
+
+/* ─── Selected song ──────────────────────────────────────────── */
+
+.selected-song-container {
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
 }
 
 .selected-song-result {
-  border: 1px solid green;  
-  background: rgb(186, 228, 186); 
+  background: rgba(235, 255, 235, 0.5);
+  padding: 12px 14px;
+  border: 1px solid rgb(145, 180, 145); 
+  margin: 1.3rem 0 0; 
+  width: 100px; 
+}
+
+.selected-song-result p {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  margin: 0;
+  letter-spacing: 0.03em;
+  line-height: 1.7;
+  padding: 0; 
+}
+
+.selected-song-result p:first-child {
+  color: #2a1000;
+  font-weight: 500;
+}
+
+.selected-song-result p:nth-child(2) {
+  color: #7a4a20;
+}
+
+.selected-song-result p:nth-child(3) {
+  color: #b02878;
+}
+
+/* ─── Prompt text ────────────────────────────────────────────── */
+
+/* targets the bare <p> prompt labels */
+p {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #5a3010;
+  /* font-style: italic; */
+  margin: 0;
+  padding: 12px 14px 6px;
+}
+
+/* ─── Post-submit action buttons ─────────────────────────────── */
+
+/* targets the two buttons after successful submit */
+/* div button {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+div button:first-child {
+  color: #b02878;
+  background: transparent;
+  border: 1px solid rgba(176, 40, 120, 0.4);
+}
+
+div button:first-child:hover {
+  background: rgba(176, 40, 120, 0.08);
+  border-color: rgba(176, 40, 120, 0.7);
+}
+
+div button:last-child {
+  color: #7a3a10;
+  background: transparent;
+  border: 1px solid rgba(58, 48, 40, 0.35);
+}
+
+div button:last-child:hover {
+  background: rgba(245, 239, 224, 0.4);
+} */
+
+/* ─── Desktop ────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  input[type="text"] {
+    font-size: 11px;
+  }
+
+  .song-result p,
+  .selected-song-result p {
+    font-size: 11px;
+  }
+
+  .song-result,
+  .selected-song-result {
+    padding: 12px 20px;
+  }
+
+  p {
+    font-size: 11px;
+    padding: 14px 20px 8px;
+  }
 }
