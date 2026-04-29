@@ -64,15 +64,6 @@ const PlayMemoryPage = () => {
     setDisplayedText(fullDecodedText.slice(0, Math.floor(charactersVisible)))
   }
 
-  // const handleRevealText = (memoryText: string) => {
-  //   let i = 0 
-  //   const interval = setInterval(() => { //setInterval() built in browser web API, returns an id 
-  //     setDisplayedText(memoryText.slice(0, i + 1))
-  //     i++
-  //     if (i >= memoryText.length) clearInterval(interval)
-  //   }, 150)
-  // }
-
   return (
     <div>
       <div className={styles['song-info-container']}>
@@ -108,11 +99,10 @@ const PlayMemoryPage = () => {
         </div>
       )}
       {encodedSongUrl && !decodedMemory && !isDecoding && <p className={styles['decode-instructions']}>press play to decode your memory!</p>}
-      <div className={styles['decoded-msg-container']}>
-        {decodedMemory && <p className={styles['decode-msg-label']}>decoded message:</p>}
-        {decodedMemory && <p className={styles['decoded-msg-text']}>{displayedText}</p>}
-      </div>
- 
+      {decodedMemory && <div className={styles['decoded-msg-container']}>
+        <p className={styles['decode-msg-label']}>decoded message:</p>
+        <p className={styles['decoded-msg-text']}>{displayedText}</p>
+      </div>}
       {encodedSongUrl && 
         <div className={styles['download-link-container']}>
           <a 
