@@ -28,7 +28,7 @@ searchRouter.get('/', async (req:Request, res: Response) => {
     const accessToken = await getAccessToken()
 
     const response = await fetch(
-      `https://api.spotify.com/v1/search?q=${encodeURIComponent(song as string)}&type=track&limit=5`, {
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(song as string)}&type=track&limit=6`, {
         headers: {Authorization: `Bearer ${accessToken}` }
       }
     )
