@@ -75,38 +75,53 @@ const PlayMemoryPage = () => {
 
   return (
     <div>
-      <div className={styles['id-container']}>
-        <p>memory id:</p>
-        <p>{memory.id}</p>
+      <div className={styles['song-info-container']}>
+        <div className={styles['song-item-container']}>
+          <p>memory id:</p>
+          <p>{memory.id}</p>
+        </div>
+        <div className={styles['song-item-container']}>
+          <p>song name:</p>
+          <p>{memory.song_name}</p>
+        </div>
+        <div className={styles['song-item-container']}>
+          <p>album:</p>
+          <p>{memory.album_name}</p>
+        </div>
+        <div className={styles['song-item-container']}>
+          <p>artist:</p>
+          <p>{memory.artist}</p>
+        </div>
       </div>
-      <div className={styles['song-container']}>
-        <p>song name:</p>
-        <p>{memory.song_name}</p>
+      <div className={styles['encode-btn-container']}>
+        {!encodedSongUrl &&(
+        <button className={styles['play-memory-page-btn']} onClick={()=> handleEncodedSong(memory.id)} >encode your memory</button>)}
       </div>
-      <div className={styles['album-container']}>
-        <p>album:</p>
-        <p>{memory.album_name}</p>
-      </div>
-      <div className={styles['artist-container']}>
-        <p>artist:</p>
-        <p>{memory.artist}</p>
-      </div>
-      {!encodedSongUrl &&(
-        <button onClick={()=> handleEncodedSong(memory.id)} >encode your memory</button>)}
-      {isEncoding && <p>encoding your memory...</p>}
+      {isEncoding && <p className={styles['encoding-text']}>encoding your memory...</p>}
       {encodedSongUrl && (
-        <div>
+        <div className={styles['audio-player-container']}>
           {/* The ontimeupdate event occurs when the play time of a media changes. The ontimeupdate event occurs while the media is playing.The ontimeupdate event occurs when the user moves the play position. */}
           <audio 
             controls src={encodedSongUrl} 
             onPlay={() =>!decodedMemory && handleDecodeMessage(memory.id)}
             onTimeUpdate={handleTimeUpdate}/>
-          <a href={encodedSongUrl} download={`memory-${id}.wav`}>download encoded song</a>
         </div>
       )}
-      {encodedSongUrl && !decodedMemory && !isDecoding && <p>press play to decode your memory!</p>}
-      {decodedMemory && <p>decoded message:</p>}
-      {decodedMemory && <p>{displayedText}</p>}
+      {encodedSongUrl && !decodedMemory && !isDecoding && <p className={styles['decode-instructions']}>press play to decode your memory!</p>}
+      <div className={styles['decoded-msg-container']}>
+        {decodedMemory && <p className={styles['decode-msg-label']}>decoded message:</p>}
+        {decodedMemory && <p className={styles['decoded-msg-text']}>{displayedText}</p>}
+      </div>
+ 
+      {encodedSongUrl && 
+        <div className={styles['download-link-container']}>
+          <a 
+          className={styles['download-link']}
+          href={encodedSongUrl} 
+          download={`memory-${id}.wav`}>
+            click to download encoded song
+          </a>
+        </div>}
     </div> 
   )
 }

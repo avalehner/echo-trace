@@ -1,3 +1,97 @@
-.id-container, .song-container, .album-container, .artist-container {
+.song-item-container {
+  display: grid;
+  grid-template-columns: 0.5fr 1.5fr;
+  gap: 1rem; 
+}
+
+.song-item-container p {
+  padding: 0.1rem 0; 
+}
+
+.song-info-container {
+  padding: 1rem; 
+  background: rgba(254, 232, 213, 0.5);
+  cursor: pointer;
+  /* border: 1px solid rgba(58, 48, 40, 0.3); */
+  margin: 1rem;
+  border-radius: 20px; 
+}
+
+.play-memory-page-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #7a3a10;
+  background: rgba(245, 239, 224, 0.5);
+  border: 1px solid rgba(58, 48, 40, 0.35);
+  border-radius: 4px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.play-memory-page-btn:hover {
+  background: rgba(255, 217, 180, 0.8);
+  border-color: rgba(58, 48, 40, 0.6);
+}
+
+.play-memory-page-btn:active {
+  transform: scale(0.97);
+}
+
+.encode-btn-container {
   display: flex; 
+  justify-content: center; 
+  margin-top: 0.5rem; 
+}
+
+.encoding-text {
+  text-align: center; 
+}
+
+.audio-player-container {
+  display: flex; 
+  justify-content: center; 
+  margin-bottom: 01rem; 
+}
+
+.decode-instructions{
+  text-align: center; 
+}
+
+.decoded-msg-container{
+  padding: 0.5rem 0; 
+  background: rgba(254, 232, 213, 0.5);
+  cursor: pointer;
+  /* border: 1px solid rgba(58, 48, 40, 0.3); */
+  margin: 1rem 1rem 1.5rem;
+  border-radius: 20px; 
+}
+
+.decode-msg-label, .decoded-msg-text {
+  margin: 0.5rem 0; 
+  padding: 0 1rem;
+
+}
+
+.download-link-container {
+  border: 1px solid rgba(58, 48, 40, 0.3);
+  display: flex; 
+  justify-content: center; 
+  width: 65%; 
+  margin:0 auto; 
+  border-radius: 8px; 
+  padding: 0.5rem; 
+  background: rgba(254, 232, 213, 0.5);
+}
+
+.download-link {
+  text-decoration: none; 
+  text-align: center; 
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem; 
+  font-weight: 100; 
+  color: rgb(31, 31, 31); 
 }
