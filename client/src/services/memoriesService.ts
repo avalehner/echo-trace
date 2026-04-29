@@ -52,7 +52,7 @@ export const generateEncodedSong = async (id: string): Promise<string> => {
   const response = await fetch(`http://localhost:3000/api/memories/${id}/download`)
   if (!response.ok) throw new Error (`Server error: ${response.status}`)
   
-  const blob = await response.blob() //blob = binary large object - raw chunk of binary data (WAV file is in binary)
+  const blob = new Blob([await response.arrayBuffer()], { type: 'audio/wav' })//blob = binary large object - raw chunk of binary data (WAV file is in binary)
   const url = URL.createObjectURL(blob) //creates a temporary URL That points to the blob in memory
 
   return url 
