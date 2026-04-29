@@ -4,8 +4,10 @@ import { NavLink } from 'react-router'
 const NavBar = () => {
   return (
     <nav className={styles['nav-bar']}>
-      <li><NavLink to="">ENTER MEMORY</NavLink></li>
-      <li><NavLink to="/explore">VIEW ALL MEMORIES</NavLink></li>
+      <ul>
+        <li><NavLink to="/">ENTER MEMORY</NavLink></li>
+        <li><NavLink to="/explore">VIEW ALL MEMORIES</NavLink></li>
+      </ul>
     </nav>
   )
 }
