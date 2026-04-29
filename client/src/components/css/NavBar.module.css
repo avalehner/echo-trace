@@ -1,16 +1,58 @@
+/* NavBar.module.css */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
+
 .nav-bar {
-  list-style-type: none;
-  gap: 1rem; 
-  display: flex; 
-  margin: 1rem 0; 
+  /* border-bottom: 1px solid rgba(103, 49, 15, 0.3); */
+  background: rgba(254, 232, 213, 0.5);
+  background: linear-gradient(to bottom, rgb(136, 136, 192, 0.467),rgba(254, 232, 213, 0));
+  /* position: sticky;
+  top: 0; */
+  padding: 1rem 0; 
 }
 
-nav a {
-  color: black; 
-  text-decoration: none; 
+.nav-bar ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-nav a:hover {
-  color: #97B48E; 
-  transition: all 0.1s ease; 
+.nav-bar li {
+  display: block;
+}
+
+.nav-bar li a {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgb(103, 49, 15);
+  padding: 12px 14px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.nav-bar li a:hover {
+  color: #3a1a00;
+}
+
+/* React Router adds .active to the matched NavLink */
+.nav-bar li a.active {
+  color: #c43e8a;
+  border-bottom-color: #c43e8a;
+}
+
+/* ─── Desktop ────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .nav-bar li a {
+    font-size: 10px;
+    padding: 13px 18px;
+  }
 }
