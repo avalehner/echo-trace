@@ -1,9 +1,150 @@
-.log-divider {
-  border: none; 
-  border-top: 1px dashed black; 
-  width: 100%; 
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
+/* 
+.all-menus-container{
+  border-radius: 25px; 
+  margin: 0 1rem; 
+  padding: 1rem 0 1.5rem; 
+  background: rgba(245, 239, 224, 0.25);
+} */
+
+.emotion-menu-container,
+.season-menu-container,
+.year-menu-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 10px;
+  padding: 8px 14px;
+  /* background: transparent; */
+  position: sticky;
+  top: 5; 
+  /* border-bottom: 1px solid rgba(200, 160, 96, 0.2); */
 }
 
-.year-menu-container, .season-menu-container, .emotion-menu-container {
-  display: flex; 
+.emotion-menu-container select,
+.season-menu-container select,
+.year-menu-container select {
+  font-family: 'DM Mono', monospace;
+  font-weight: 100; 
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: #352008;
+  background: rgba(245, 239, 224, 0.5);
+  border: 1px solid rgba(186, 87, 11, 0.55);
+  border-radius: 4px;
+  padding: 6px 26px 6px 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='4' viewBox='0 0 7 4'%3E%3Cpath d='M0 0l3.5 4 3.5-4z' fill='%23c8a060'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  cursor: pointer;
+  flex: 1;
+  width: 200px;
+  transition: border-color 0.15s ease;
+}
+
+.emotion-menu-container select:focus,
+.season-menu-container select:focus,
+.year-menu-container select:focus {
+  outline: none;
+  border-color: rgba(125, 50, 0, 0.55);
+}
+
+/* Button */
+
+.reset-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7a3a10;
+  background: rgba(245, 239, 224, 0.55);
+  border: 1px solid rgba(186, 87, 11, 0.55);
+  border-radius: 4px;
+  padding: 8px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.reset-btn:hover {
+  background: rgba(245, 239, 224, 0.45);
+  border-color: rgba(200, 160, 96, 0.8);
+}
+
+.reset-btn:active {
+  transform: scale(0.97);
+}
+
+/* ─── Divider between memory cards ──────────────────────────── */
+
+.log-divider {
+  border: none;
+  border-top: 1px solid #3a3028;
+  margin: 0;
+}
+
+/* ─── Empty state ────────────────────────────────────────────── */
+
+p {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #5a3010;
+  padding: 24px 14px;
+}
+
+/* ─── Desktop (768px+) ───────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .emotion-menu-container,
+  .season-menu-container,
+  .year-menu-container {
+    display: inline-flex;
+    flex: 1;
+    padding: 10px 16px;
+    border-bottom: none;
+    border-right: 1px solid rgba(200, 160, 96, 0.2);
+  }
+
+  .year-menu-container {
+    border-right: none;
+  }
+
+  /* Wrap all three in a div.filters-bar for this to work on desktop */
+  .filters-bar {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #3a3028;
+  }
+
+  .emotion-menu-container select,
+  .season-menu-container select,
+  .year-menu-container select {
+    max-width: none;
+  }
+
+  /* Desktop grid — wrap renderMemories output in div.memories-grid */
+  .memories-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .memories-grid > div {
+    border-right: 1px solid #3a3028;
+    border-bottom: 1px solid #3a3028;
+  }
+
+  .memories-grid > div:nth-child(even) {
+    border-right: none;
+  }
+
+  .memories-grid > div:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+
+  .memories-grid .log-divider {
+    display: none;
+  }
 }

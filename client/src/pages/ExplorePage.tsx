@@ -33,21 +33,12 @@ const ExplorePage = () => {
   }, [emotion, season, year])
 
   const renderMemories = () => {
-    return memories.map((memory, index) => {
-      if (index < memories.length -1) {
-        return (
-          <div key={memory.id}>
-            <MemoryLog memory={memory} />
-            <hr className={styles['log-divider']}/>
-         </div>
-        )
-      } else {
-        return (
-          <div key={memory.id} >
-            <MemoryLog memory={memory} />
-          </div>
-        )
-      }
+    return memories.map((memory) => {
+      return (
+        <div key={memory.id}>
+          <MemoryLog memory={memory} />
+        </div>
+      )
     }) 
   }
 
@@ -59,26 +50,28 @@ const ExplorePage = () => {
 
   return (
     <>
-      <div className={styles['emotion-menu-container']}>
-        <EmotionMenu 
-          emotion={emotion}
-          setEmotion={setEmotion}
-        /> 
-        <button onClick={() => handleFilterReset('emotion')}>RESET</button>
-      </div>
-      <div className={styles['season-menu-container']}>
-        <SeasonMenu 
-          season={season}
-          setSeason={setSeason}
-        />
-        <button onClick={() => handleFilterReset('season')}>RESET</button>
-      </div>
-      <div className={styles['year-menu-container']}>
-        <YearMenu 
-          year={year}
-          setYear={setYear}
-        />
-        <button onClick={() => handleFilterReset('year')}>RESET</button>
+      <div className={styles['all-menus-container']}>
+        <div className={styles['emotion-menu-container']}>
+          <EmotionMenu 
+            emotion={emotion}
+            setEmotion={setEmotion}
+          /> 
+          <button className={styles['reset-btn']} onClick={() => handleFilterReset('emotion')}>RESET</button>
+        </div>
+        <div className={styles['season-menu-container']}>
+          <SeasonMenu 
+            season={season}
+            setSeason={setSeason}
+          />
+          <button className={styles['reset-btn']} onClick={() => handleFilterReset('season')}>RESET</button>
+        </div>
+        <div className={styles['year-menu-container']}>
+          <YearMenu 
+            year={year}
+            setYear={setYear}
+          />
+          <button className={styles['reset-btn']} onClick={() => handleFilterReset('year')}>RESET</button>
+        </div>
       </div>
       {memories.length === 0 ? <p>no memories found </p> : renderMemories()}
     </>
