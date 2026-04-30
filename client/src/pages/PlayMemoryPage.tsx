@@ -5,6 +5,7 @@ import { getMemoryById } from '../services/memoriesService'
 // import MemoryLog from '../components/MemoryLog'
 import { generateEncodedSong, decodeSong } from '../services/memoriesService'
 import styles from './css/PlayMemoryPage.module.css'
+// import WaveSurfer from 'wavesurfer.js'
 
 const PlayMemoryPage = () => {
   const [memory, setMemory] = useState<MemoryTypes | null>(null)
@@ -60,6 +61,26 @@ const PlayMemoryPage = () => {
     }
   }
 
+  // useEffect(() => {
+  //   if (!encodedSongUrl) return 
+  //   if (!memory) return 
+    
+  //   const waveSurfer = WaveSurfer.create({
+  //     container: '#waveform', 
+  //     waveColor: '#4f4A85', 
+  //     progressColor: '#383351', 
+  //     url: encodedSongUrl, 
+  //     sampleRate: 48000, 
+  //   })
+
+  //   waveSurfer.on('play', () => !decodedMemory && handleDecodeMessage(memory.id))
+  //   waveSurfer.on('audioprocess', (currentTime: number) => {
+  //     //handleTimeUpdate logic
+  //   })
+    
+  //   return () => waveSurfer.destroy() //cleanup and unmount 
+  // }, [encodedSongUrl])
+
   const handleTimeUpdate = (e: React.SyntheticEvent<HTMLAudioElement>) => { //type for event on audio element 
     if (!encodedCharCount) return 
     const currentTime = (e.target as HTMLAudioElement).currentTime //in seconds 
@@ -72,7 +93,9 @@ const PlayMemoryPage = () => {
   }
 
   return (
-    <div>
+    <>
+    <div className={styles["your-memory-container"]}>
+      <h1 className={styles['title']}>your memory</h1>
       <div className={styles['song-info-container']}>
         <div className={styles['song-item-container']}>
           <p>memory id:</p>
@@ -96,20 +119,23 @@ const PlayMemoryPage = () => {
         <button className={styles['play-memory-page-btn']} onClick={()=> handleEncodedSong(memory.id)} >encode your memory</button>)}
       </div>
       {isEncoding && <p className={styles['encoding-text']}>encoding your memory...</p>}
+      {encodedSongUrl && !decodedMemory && !isDecoding && <p className={styles['decode-instructions']}>press play to decode your memory!</p>}
       {encodedSongUrl && (
         <div className={styles['audio-player-container']}>
           {/* The ontimeupdate event occurs when the play time of a media changes. The ontimeupdate event occurs while the media is playing.The ontimeupdate event occurs when the user moves the play position. */}
           <audio 
+            className={styles['audio-player']}
             controls src={encodedSongUrl} 
             onPlay={() =>!decodedMemory && handleDecodeMessage(memory.id)}
             onTimeUpdate={handleTimeUpdate}/>
+          {/* {wavesurfer} */}
         </div>
       )}
-      {encodedSongUrl && !decodedMemory && !isDecoding && <p className={styles['decode-instructions']}>press play to decode your memory!</p>}
       {decodedMemory && <div className={styles['decoded-msg-container']}>
         <p className={styles['decode-msg-label']}>decoded message:</p>
         <p className={styles['decoded-msg-text']}>{displayedText}</p>
       </div>}
+    </div> 
       {encodedSongUrl && 
         <button className={styles['download-link-btn']}>
           <a 
@@ -119,7 +145,7 @@ const PlayMemoryPage = () => {
             click to download encoded song
           </a>
         </button>}
-    </div> 
+    </>
   )
 }
 

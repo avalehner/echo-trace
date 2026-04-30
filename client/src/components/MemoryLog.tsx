@@ -37,7 +37,7 @@ const navigate = useNavigate()
       </div>
       <div className={styles['memory-fragment-container']}>
         <p>memory:</p>
-        <p>{memory.memory_fragment}</p>
+        <p className={styles['truncate']}>{memory.memory_fragment}</p>
       </div>
     </div>
   )

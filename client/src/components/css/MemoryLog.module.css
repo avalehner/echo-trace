@@ -24,6 +24,7 @@
 .memory-fragment-container {
   display: flex;
   line-height: 1.8;
+  gap: 0.4rem;
 }
 
 .song-container p,
@@ -34,7 +35,7 @@
 .year-container p,
 .memory-fragment-container p {
   font-family: 'DM Mono', monospace;
-  font-size: 10px;
+  font-size: 0.7rem;
   font-weight: 400;
   margin: 0;
   padding: 0; 
@@ -61,20 +62,20 @@
 .album-container p:last-child,
 .emotion-container p:last-child,
 .memory-fragment-container p:last-child {
-  color: #2a1000;
+  color: #4f0867;
 }
 
 .artist-container p:last-child {
-  color: #b02878;
+  color: #a04a10;
 }
 
 .season-container p:last-child,
 .year-container p:last-child {
-  color: #b02878;
+  color: #0b4209;
 }
 
 .emotion-container p:last-child {
-  color: #a04a10;
+  color: #b02878;
 }
 
 .memory-fragment-container p:last-child {
@@ -82,6 +83,14 @@
   font-weight: 300;
   color: #5a3010;
   line-height: 1.55;
+}
+
+.truncate{
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* Number of lines to show before truncating */
+  -webkit-box-orient: vertical;
+  overflow: hidden;    
+  line-clamp: 2;        /* Required to hide extra lines */
 }
 
 /* ─── Desktop ────────────────────────────────────────────────── */
@@ -98,7 +107,7 @@
   .season-container p,
   .year-container p,
   .memory-fragment-container p {
-    font-size: 11px;
+    font-size: 0.85rem;
   }
 
   .song-container p:first-child,

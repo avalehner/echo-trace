@@ -1,18 +1,34 @@
+.your-memory-container {
+  border-radius: 25px; 
+  margin: 0 1rem; 
+  padding: 0.5rem 0 2.3rem;
+  background: rgba(245, 239, 224, 0.2);
+}
+
+.title {
+  text-align: center; 
+  color: #67310f; 
+  font-family: 'DM Mono', monospace;
+  font-weight: 100; 
+  margin: 1.4rem 0 1.8rem; 
+}
+
 .song-item-container {
   display: grid;
-  grid-template-columns: 0.5fr 1.5fr;
-  gap: 1rem; 
+  grid-template-columns: 1.1fr 4fr;
+  gap: 0rem; 
 }
 
 .song-item-container p {
   padding: 0.2rem 0; 
   margin: 0; 
+  font-family: 'DM Mono', monospace;
+  color: #7a3a10;
 }
 
 .song-info-container {
   padding: 1rem; 
   background: rgba(254, 232, 213, 0.5);
-  cursor: pointer;
   /* border: 1px solid rgba(58, 48, 40, 0.3); */
   margin: 1rem;
   border-radius: 20px; 
@@ -34,7 +50,7 @@
 }
 
 .play-memory-page-btn:hover, .download-link-btn:hover {
-  background: rgba(255, 217, 180, 0.8);
+  background: rgba(255, 227, 199, 0.8);
   /* border-color: rgba(58, 48, 40, 0.6); */
 }
 
@@ -55,8 +71,12 @@
 .audio-player-container {
   display: flex; 
   justify-content: center; 
-  margin-bottom: 01rem; 
+  margin-bottom: 1rem; 
 }
+
+/* audio {
+  border-radius: px; 
+} */
 
 .decode-instructions{
   text-align: center; 
@@ -69,16 +89,17 @@
   /* border: 1px solid rgba(58, 48, 40, 0.3); */
   margin: 1rem 1rem 1.5rem;
   border-radius: 20px; 
+  color: #7a3a10;
+  font-family: 'DM Mono', monospace;
 }
 
 .decode-msg-label, .decoded-msg-text {
   margin: 0.5rem 0; 
   padding: 0 1rem;
-
 }
 
 .download-link-btn {
-  border: 1px solid rgba(58, 48, 40, 0.3);
+  border: none; 
   display: flex; 
   justify-content: center; 
   width: 68%; 
@@ -95,4 +116,58 @@
   font-size: 0.8rem; 
   font-weight: 100; 
   color: #7a3a10;
+}
+
+/* text */
+
+.song-item-container p, 
+.encoding-text, 
+.decode-instructions, 
+.decoded-msg-container p {
+  color: #67310f; 
+  font-family: 'DM Mono', monospace;
+}
+
+@media (min-width: 768px) {
+  .download-link-btn {
+    box-shadow: 1px 1px 20px 2px rgba(109, 91, 173, 0.2);
+  }
+
+  .your-memory-container {
+    width: 600px; 
+    margin: 1rem auto 0; 
+  }
+
+  .song-info-container {
+    padding: 1.2rem 1.7rem; 
+    width: 430px; 
+    margin: 1rem auto 1.5rem; 
+  }
+
+  .song-item-container p, 
+  .encoding-text, 
+  .decode-instructions, 
+  .decoded-msg-container p {
+  font-size: 0.8rem; 
+  }
+  
+  .decode-instructions {
+    padding: 0; 
+    margin: 0.5rem 0 1.5rem; 
+  }
+
+  .decoded-msg-container {
+    width: 500px; 
+    margin: 1.5rem auto 0; 
+  }
+
+  .play-memory-page-btn { 
+    padding: 10px 18px;
+    font-size: 0.78rem; 
+  }
+
+  .download-link-btn {
+    margin-top: 2rem; 
+    width: 300px; 
+  }
 }

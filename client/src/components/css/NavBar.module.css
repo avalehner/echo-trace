@@ -3,12 +3,8 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
 
 .nav-bar {
-  /* border-bottom: 1px solid rgba(103, 49, 15, 0.3); */
-  background: rgba(254, 232, 213, 0.5);
-  background: linear-gradient(to bottom, rgb(136, 136, 192, 0.467),rgba(254, 232, 213, 0));
-  /* position: sticky;
-  top: 0; */
-  padding: 1rem 0; 
+
+  padding: 1.5rem 0 1rem; 
 }
 
 .nav-bar ul {
@@ -26,12 +22,12 @@
 .nav-bar li a {
   display: block;
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
-  color: rgb(103, 49, 15);
+  color: rgb(68, 31, 7);
   padding: 12px 14px;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
@@ -52,7 +48,16 @@
 
 @media (min-width: 768px) {
   .nav-bar li a {
-    font-size: 10px;
+    font-size: 0.9rem;
     padding: 13px 18px;
   }
+
+  .nav-bar li {
+    display: block;
+    padding: 12px 20px;
+  }
+
+  /* .nav-bar {
+    padding-top: 2rem; 
+  } */
 }

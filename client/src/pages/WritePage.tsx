@@ -95,79 +95,81 @@ const handleRefresh = () => {
 
   return (
     <>
-      <h1 className={styles['title']}>echo-trace</h1>
-      <div className={styles['data-input-container']}>
-        <div className={styles['search-container']}>
-          <input 
-            className={styles['text-input']}
-            type="text"
-            placeholder="enter title or artist"
-            value={searchQuery}
-            onChange={(e)=> setSearchQuery(e.target.value)}
-          />
-          <button className={styles['write-page-btn']} onClick={getSongs}>{searching ? 'searching...' : 'SEARCH'}</button>
+      <div className={styles['write-page-container']}>
+        <h1 className={styles['title']}>echo-trace</h1>
+        <div className={styles['data-input-container']}>
+          <div className={styles['search-container']}>
+            <input 
+              className={styles['text-input']}
+              type="text"
+              placeholder="enter title or artist"
+              value={searchQuery}
+              onChange={(e)=> setSearchQuery(e.target.value)}
+            />
+            <button className={styles['write-page-btn']} onClick={getSongs}>{searching ? 'searching...' : 'SEARCH'}</button>
+          </div>
+          {searchResults.length > 0 && 
+            <div className={styles['refresh-btn-container']} >
+              <button 
+                className={styles['write-page-btn']} 
+                onClick={()=> handleRefresh()}>
+                  REFRESH
+              </button>
+            </div>}
+          {/* {searchingMessage && <p>{searchingMessage}</p>} */}
+          <div className={selectedSong ? styles['selected-song-container'] : styles['song-results-container']}>
+            {selectedSong ? (
+              <div className={styles['selected-song-result']}>
+                <p>{selectedSong.song_name}</p>
+                <p>{selectedSong.album_name}</p>
+                <p>{selectedSong.artist}</p>
+              </div>)  
+              : (renderSongs(searchResults))}
+          </div>
+          <div className={styles['emotion-menu-container']}>
+            <p>listening to this song made me feel</p>
+            <EmotionMenu 
+              emotion={emotion}
+              setEmotion={setEmotion}
+            />
+          </div>
+          <div className={styles['season-menu-container']}>
+            <p>this song reminds me of</p>
+            <SeasonMenu 
+              season={season}
+              setSeason={setSeason}
+            />
+            <YearMenu 
+              year={year}
+              setYear={setYear}
+            />
+          </div>
+          <div className={styles['memory-input-container']}>
+            <input 
+              className={styles['text-input']}
+              type="text"
+              placeholder="enter a memory"
+              value={memoryFragment}
+              onChange={(e)=> setMemoryFragement(e.target.value)}
+            />
+          </div>
+          <div className={styles['submit-btn-container']}>
+            <button className={styles['write-page-btn']} onClick={submitMemory}>{submitting ? 'submitting': 'SUBMIT'}</button>
+          </div>
         </div>
-        {searchResults.length > 0 && 
-          <div className={styles['refresh-btn-container']} >
-            <button 
-              className={styles['write-page-btn']} 
-              onClick={()=> handleRefresh()}>
-                REFRESH
+        {submittingMessage && <p>{submittingMessage}</p>}
+        {submittedMemory && (
+          <div className={styles['after-submit-btns-container']}>
+            <button className={styles['write-page-btn']} onClick={() => navigate(`/listen/${submittedMemory.id}`)}>listen to your memory</button>
+            <button className={styles['write-page-btn']} onClick={()=> {
+              setSubmittedMemory(null)
+              handleRefresh()
+            }}>
+              submit another memory
             </button>
-          </div>}
-        {/* {searchingMessage && <p>{searchingMessage}</p>} */}
-        <div className={selectedSong ? styles['selected-song-container'] : styles['song-results-container']}>
-          {selectedSong ? (
-            <div className={styles['selected-song-result']}>
-              <p>{selectedSong.song_name}</p>
-              <p>{selectedSong.album_name}</p>
-              <p>{selectedSong.artist}</p>
-            </div>)  
-            : (renderSongs(searchResults))}
-        </div>
-        <div className={styles['emotion-menu-container']}>
-          <p>listening to this song made me feel</p>
-          <EmotionMenu 
-            emotion={emotion}
-            setEmotion={setEmotion}
-          />
-        </div>
-        <div className={styles['season-menu-container']}>
-          <p>this song reminds me of</p>
-          <SeasonMenu 
-            season={season}
-            setSeason={setSeason}
-          />
-          <YearMenu 
-            year={year}
-            setYear={setYear}
-          />
-        </div>
-        <div className={styles['memory-input-container']}>
-          <input 
-            className={styles['text-input']}
-            type="text"
-            placeholder="enter a memory"
-            value={memoryFragment}
-            onChange={(e)=> setMemoryFragement(e.target.value)}
-          />
-        </div>
-        <div className={styles['submit-btn-container']}>
-          <button className={styles['write-page-btn']} onClick={submitMemory}>{submitting ? 'submitting': 'SUBMIT'}</button>
-        </div>
+          </div>
+        )}
       </div>
-      {submittingMessage && <p>{submittingMessage}</p>}
-      {submittedMemory && (
-        <div className={styles['after-submit-btns-container']}>
-          <button className={styles['write-page-btn']} onClick={() => navigate(`/listen/${submittedMemory.id}`)}>listen to your memory</button>
-          <button className={styles['write-page-btn']} onClick={()=> {
-            setSubmittedMemory(null)
-            handleRefresh()
-          }}>
-            submit another memory
-          </button>
-        </div>
-      )}
     </>
   )
 }
