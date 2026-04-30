@@ -9,12 +9,16 @@ const EmotionMenu = ({ emotion, setEmotion}: EmotionMenuProps) => {
   return (
     <div className={styles['emotion-menu-container']}>
       <select className={styles['emotion-menu']} value={emotion} onChange={(e)=> setEmotion(e.target.value)}>
-        <option value="" disabled>select emotion</option>
+        <option value="" disabled>select feeling</option>
         <option value="excited">excited</option>
+        <option value="ethereal">ethereal</option>
+        <option value="daring">daring</option>
         <option value="warm">warm</option>
         <option value="wonder">wonder</option>
         <option value="euphoria">euphoria</option>
         <option value="sentimental">sentimental</option>
+        <option value="triumphant">triumphant</option>
+        <option value="determined">determined</option>
         <option value="nostalgic">nostalgic</option>
         <option value="heartbroken">heartbroken</option>
         <option value="longing">longing</option>
@@ -27,7 +31,7 @@ const EmotionMenu = ({ emotion, setEmotion}: EmotionMenuProps) => {
         <option value="bittersweet">bittersweet</option>
         <option value="anger">anger</option>
         <option value="dancy">dancy</option>
-
+        <option value="dirty">dirty</option>
         <option value="depressed">depressed</option>
       </select>
     </div>

@@ -153,7 +153,7 @@ const handleRefresh = () => {
           />
         </div>
         <div className={styles['submit-btn-container']}>
-          <button className={styles['submit-btn']} onClick={submitMemory}>{submitting ? 'submitting': 'SUBMIT'}</button>
+          <button className={styles['write-page-btn']} onClick={submitMemory}>{submitting ? 'submitting': 'SUBMIT'}</button>
         </div>
       </div>
       {submittingMessage && <p>{submittingMessage}</p>}

@@ -15,10 +15,8 @@
   justify-content: center; 
   gap: 10px;
   padding: 8px 14px;
-  /* background: transparent; */
   position: sticky;
   top: 5; 
-  /* border-bottom: 1px solid rgba(200, 160, 96, 0.2); */
 }
 
 .emotion-menu-container select,
@@ -30,7 +28,7 @@
   letter-spacing: 0.06em;
   color: #352008;
   background: rgba(245, 239, 224, 0.5);
-  border: 1px solid rgba(186, 87, 11, 0.55);
+  border: 1px solid rgba(193, 131, 83, 0.55);
   border-radius: 4px;
   padding: 6px 26px 6px 10px;
   appearance: none;
@@ -60,8 +58,8 @@
   text-transform: uppercase;
   color: #7a3a10;
   background: rgba(245, 239, 224, 0.55);
-  border: 1px solid rgba(186, 87, 11, 0.55);
-  border-radius: 4px;
+  border: 1px solid rgba(193, 131, 83, 0.55);
+  border-radius: 6px;
   padding: 8px 10px;
   cursor: pointer;
   white-space: nowrap;

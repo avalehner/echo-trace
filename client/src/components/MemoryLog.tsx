@@ -24,7 +24,7 @@ const navigate = useNavigate()
         <p>{memory.artist}</p>
       </div>
       <div className={styles['emotion-container']}>
-        <p>emotion:</p>
+        <p>feeling:</p>
         <p>{memory.emotion}</p>
       </div>
       <div className={styles['season-container']}>

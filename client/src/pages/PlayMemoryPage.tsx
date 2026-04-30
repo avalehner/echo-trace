@@ -50,7 +50,7 @@ const PlayMemoryPage = () => {
       console.log('decoded', decoded)
       setDecodedMemory(decoded)
       setEncodedCharCount(encodedCharLength)
-      const fullText = `emotion: ${decoded.emotion}, ` + `season: ${decoded.season} ` + `${decoded.year}, ` + `memory: ${decoded.memory_fragment}`
+      const fullText = `feeling: ${decoded.emotion}, ` + `season: ${decoded.season} ` + `${decoded.year}, ` + `memory: ${decoded.memory_fragment}`
       setFullDecodedText(fullText)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown Error'
@@ -111,14 +111,14 @@ const PlayMemoryPage = () => {
         <p className={styles['decoded-msg-text']}>{displayedText}</p>
       </div>}
       {encodedSongUrl && 
-        <div className={styles['download-link-container']}>
+        <button className={styles['download-link-btn']}>
           <a 
           className={styles['download-link']}
           href={encodedSongUrl} 
           download={`memory-${id}.wav`}>
             click to download encoded song
           </a>
-        </div>}
+        </button>}
     </div> 
   )
 }
