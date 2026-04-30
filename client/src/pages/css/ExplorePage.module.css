@@ -69,8 +69,8 @@
 }
 
 .reset-btn:hover {
-  background: rgba(245, 239, 224, 0.45);
-  border-color: rgba(200, 160, 96, 0.8);
+  background: rgba(255, 217, 180, 0.8);
+  /* border-color: rgba(58, 48, 40, 0.6); */
 }
 
 .reset-btn:active {
