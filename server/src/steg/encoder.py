@@ -64,7 +64,7 @@ def encode (wav_path, json_string):
   message_bits = ''
 
   for character in message: 
-    ascii_number = ord(character) #get ASCII number
+    ascii_number = ord(character) #get ASCII number, 8 bit numerical codes that represent text, characters and control symbols in computers
     binary = format(ascii_number, '08b') #convert number to an 8 bit binary string
     message_bits += binary #store in message_bits string  
 
@@ -76,7 +76,8 @@ def encode (wav_path, json_string):
   for i, bit in enumerate(message_bits): #enumerate gets both index and value while looping 
     sample_index = i * interval #calculates which sample to write the current bit into to spread across 30 seconds 
     #for each bit in message go to the correct sample, force the last bit to match the message bit
-    MSB = np.int16(-32768)
+    MSB = np.int16(-32768) #bitmask for first bit in sample (most significant bit)
+    print(MSB)
     if int(bit) == 1: 
       audio_data[sample_index] = audio_data[sample_index] | MSB #forces first bit to 1
     else: 
@@ -86,7 +87,7 @@ def encode (wav_path, json_string):
   if sample_width == 2: 
       raw_data_modified = audio_data.astype('<i2').tobytes() # convertsback to bytes
   else:                                                                           
-      raise ValueError("Wrong format")   #throws error 
+      raise ValueError("Wrong format")#throws error 
   
   output_filename = wav_path.replace('.wav', '_encoded.wav')
 
@@ -100,8 +101,8 @@ def encode (wav_path, json_string):
   
   return output_filename
 
-if __name__ == '__main__': 
-   encode('../audio/e522eebb-8b0b-40c9-9049-a041e4c39fe6.wav', '{"test": "data"}' )
+# if __name__ == '__main__': 
+#    encode('../audio/ab81e378-8f01-4052-bc45-9b2fec13e547.wav', '{"test": "data"}' )
 
  
                                                                                   
