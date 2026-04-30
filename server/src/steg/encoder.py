@@ -70,16 +70,17 @@ def encode (wav_path, json_string):
 
   print(message_bits)
 
-  interval = 800 #fixed interval, makes decoding easier 
+  interval = 1600 #fixed interval, makes decoding easier 
 
   #gives me the bit and the index of the bit 
   for i, bit in enumerate(message_bits): #enumerate gets both index and value while looping 
     sample_index = i * interval #calculates which sample to write the current bit into to spread across 30 seconds 
     #for each bit in message go to the correct sample, force the last bit to match the message bit
+    MSB = np.int16(-32768)
     if int(bit) == 1: 
-      audio_data[sample_index] = audio_data[sample_index] | 1 #forces last bit to 1
+      audio_data[sample_index] = audio_data[sample_index] | MSB #forces first bit to 1
     else: 
-      audio_data[sample_index] = audio_data[sample_index] & ~1 #forces last bit to 0
+      audio_data[sample_index] = audio_data[sample_index] & ~MSB #forces first bit to 0
 
   #converts the modified array back to raw bytes, mathcing the original sample width 
   if sample_width == 2: 

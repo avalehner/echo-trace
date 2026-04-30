@@ -44,6 +44,7 @@ def decode (wav_path):
   print(f"channels: {num_channels}")                                              
   print(f"sample width: {sample_width} bytes")                                    
   print(f"num frames: {num_frames}")  
+  print(f"frame rate: {frame_rate}")
 
   #reads all the audio frames as raw binary bytes  
   raw_data = wav_file.readframes(num_frames)                                     
@@ -60,12 +61,12 @@ def decode (wav_path):
   audio_data = audio_data.copy()
 
   #decoding logic 
-  interval = 800 #fixed interval between samples
+  interval = 1600 #fixed interval between samples
   extracted_bits = ''
   message = ''
 
   for i in range(0, len(audio_data), interval): 
-    bit = audio_data[i] & 1 #extracts the last bit in the sample 
+    bit = 1 if (audio_data[i] & np.int16(-32768)) else 0 #extracts the first bit in the sample 
     extracted_bits += str(bit) #appends to extracted bit string 
 
     if len(extracted_bits) == 8: 
@@ -76,6 +77,9 @@ def decode (wav_path):
       extracted_bits = '' #reset for next 8 bits 
   
   return(json.loads(message))
+
+if __name__ == "__main__":
+   decode('../audio/f92a3558-9a9c-4da3-85b6-f14a11138c16_encoded.wav')
 
   
 
