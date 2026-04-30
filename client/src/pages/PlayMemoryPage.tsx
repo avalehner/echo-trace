@@ -14,6 +14,7 @@ const PlayMemoryPage = () => {
   const [decodedMemory, setDecodedMemory] = useState<DecodedMemoryTypes | null>(null)
   const [displayedText, setDisplayedText] = useState<string>('')
   const [fullDecodedText, setFullDecodedText] = useState<string>('')
+  const [encodedCharCount, setEncodedCharCount] = useState<number | null>(null)
 
   const { id } = useParams()
 
@@ -44,8 +45,11 @@ const PlayMemoryPage = () => {
       setIsDecoding(true)
       // await new Promise(resolve => setTimeout(resolve, 5000)) //makes async/await sleep for a duration
       const decoded = await decodeSong(memoryId)
+      const rawJson = JSON.stringify(decoded)
+      const encodedCharLength = rawJson.length 
       console.log('decoded', decoded)
       setDecodedMemory(decoded)
+      setEncodedCharCount(encodedCharLength)
       const fullText = `emotion: ${decoded.emotion}, ` + `season: ${decoded.season} ` + `${decoded.year}, ` + `memory: ${decoded.memory_fragment}`
       setFullDecodedText(fullText)
     } catch (error) {
@@ -57,10 +61,13 @@ const PlayMemoryPage = () => {
   }
 
   const handleTimeUpdate = (e: React.SyntheticEvent<HTMLAudioElement>) => { //type for event on audio element 
+    if (!encodedCharCount) return 
     const currentTime = (e.target as HTMLAudioElement).currentTime //in seconds 
-    const samplesPlayed = currentTime * 44100
-    const bitsDecoded = samplesPlayed / 800 //added a bit every 800 samples 
-    const charactersVisible = bitsDecoded / 8 //each character is 8 bits
+    const samplesPlayed = currentTime * 48000 * 2
+    const bitsDecoded = samplesPlayed / 1600 //added a bit every 1600 samples 
+    const charactersEncoded = Math.floor(bitsDecoded / 8)
+    const ratio = fullDecodedText.length / encodedCharCount //how long is display text compared to encoded JSON
+    const charactersVisible = Math.floor(charactersEncoded * ratio)
     setDisplayedText(fullDecodedText.slice(0, Math.floor(charactersVisible)))
   }
 
