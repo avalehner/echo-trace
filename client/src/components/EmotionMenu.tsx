@@ -11,6 +11,7 @@ const EmotionMenu = ({ emotion, setEmotion}: EmotionMenuProps) => {
       <select className={styles['emotion-menu']} value={emotion} onChange={(e)=> setEmotion(e.target.value)}>
         <option value="" disabled>select feeling</option>
         <option value="excited">excited</option>
+        <option value="desperate">desperate</option>
         <option value="ethereal">ethereal</option>
         <option value="daring">daring</option>
         <option value="warm">warm</option>
