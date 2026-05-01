@@ -73,13 +73,15 @@
 
 .audio-player-container {
   display: flex; 
+  flex-direction: column;
   justify-content: center; 
   margin-bottom: 1rem; 
 }
 
-/* audio {
-  border-radius: px; 
-} */
+audio {
+  width: 300px; 
+  margin: 0 auto; 
+}
 
 .decode-instructions{
   text-align: center; 

@@ -33,6 +33,7 @@ const PlayMemoryPage = () => {
       await new Promise(resolve => setTimeout(resolve, 1500)) //makes async/await sleep for a duration
       const url = await generateEncodedSong(memoryId)
       setEncodedSongUrl(url)
+      handleDecodeMessage(memoryId)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error' 
       console.error(message)
@@ -44,7 +45,6 @@ const PlayMemoryPage = () => {
   const handleDecodeMessage = async (memoryId: string) => {
     try {
       setIsDecoding(true)
-      // await new Promise(resolve => setTimeout(resolve, 5000)) //makes async/await sleep for a duration
       const decoded = await decodeSong(memoryId)
       const rawJson = JSON.stringify(decoded)
       const encodedCharLength = rawJson.length 
@@ -129,12 +129,12 @@ const PlayMemoryPage = () => {
             onPlay={() =>!decodedMemory && handleDecodeMessage(memory.id)}
             onTimeUpdate={handleTimeUpdate}/>
           {/* {wavesurfer} */}
+          <div className={styles['decoded-msg-container']}>
+            <p className={styles['decode-msg-label']}>decoded message:</p>
+            <p className={styles['decoded-msg-text']}>{displayedText}</p>
+          </div>
         </div>
       )}
-      {decodedMemory && <div className={styles['decoded-msg-container']}>
-        <p className={styles['decode-msg-label']}>decoded message:</p>
-        <p className={styles['decoded-msg-text']}>{displayedText}</p>
-      </div>}
     </div> 
       {encodedSongUrl && 
         <button className={styles['download-link-btn']}>
