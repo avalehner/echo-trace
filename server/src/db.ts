@@ -6,7 +6,7 @@ const pool = new Pool({
   host: process.env.DB_HOST, 
   port: Number(process.env.DB_PORT), 
   database: process.env.DB_NAME, 
-  ssl: { rejectUnauthorized: false } //required for supabase 
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false //required for supabase 
 })
 
 export default pool 
