@@ -93,6 +93,11 @@
   line-clamp: 2;        /* Required to hide extra lines */
 }
 
+.memory-log-container:hover {
+  background: rgba(245, 239, 224, 0.35);
+  transition: background 0.15s ease;
+}
+
 /* ─── Desktop ────────────────────────────────────────────────── */
 
 @media (min-width: 768px) {
