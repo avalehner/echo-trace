@@ -5,7 +5,12 @@ import { promisify } from 'util' // a utility from nodes built in util module th
 import fs from 'fs' //for creating and checking files/folders 
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3' //
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3' 
+import 'dotenv/config'
+
+
+console.log('R2_ACCOUNT_ID:', process.env.R2_ACCOUNT_ID)
+console.log('R2_ACCESS_KEY_ID:', process.env.R2_ACCESS_KEY_ID)
 
 //create R2 client 
 const r2Client = new S3Client({
@@ -13,7 +18,7 @@ const r2Client = new S3Client({
   endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`, //R2's S3 API endpoint 
   credentials: {
     accessKeyId: process.env.R2_ACCESS_KEY_ID!, 
-    secretAccessKey: process.env.SECRET_ACCESS_KEY!, 
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!, 
   },
 })
 
@@ -65,7 +70,7 @@ export const uploadToR2 = async (filepath: string, key: string): Promise<string>
 
 //download song files from R2 
 export const downloadFromR2 = async (key: string, destPath: string): Promise<void> => {
-  const publicUrl = `${process.env.R2_PUBLIC_URL}`
+  const publicUrl = `${process.env.R2_PUBLIC_URL}/${key}`
   
   const response = await fetch(publicUrl) //fetches file from R2's public URL 
   if (!response.ok) throw new Error (`Failed to download from R2: ${response.status}`)

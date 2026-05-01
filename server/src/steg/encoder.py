@@ -77,7 +77,6 @@ def encode (wav_path, json_string):
     sample_index = i * interval #calculates which sample to write the current bit into to spread across 30 seconds 
     #for each bit in message go to the correct sample, force the last bit to match the message bit
     MSB = np.int16(-32768) #bitmask for first bit in sample (most significant bit)
-    print(MSB)
     if int(bit) == 1: 
       audio_data[sample_index] = audio_data[sample_index] | MSB #forces first bit to 1
     else: 
