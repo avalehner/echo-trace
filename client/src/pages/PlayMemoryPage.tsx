@@ -30,7 +30,7 @@ const PlayMemoryPage = () => {
   const handleEncodedSong = async (memoryId: string) => {
     try {
       setIsEncoding(true)
-      await new Promise(resolve => setTimeout(resolve, 2000)) //makes async/await sleep for a duration
+      await new Promise(resolve => setTimeout(resolve, 1500)) //makes async/await sleep for a duration
       const url = await generateEncodedSong(memoryId)
       setEncodedSongUrl(url)
     } catch (error) {
@@ -99,19 +99,19 @@ const PlayMemoryPage = () => {
       <div className={styles['song-info-container']}>
         <div className={styles['song-item-container']}>
           <p>memory id:</p>
-          <p>{memory.id}</p>
+          <p className={styles['memory-id']}>{memory.id}</p>
         </div>
         <div className={styles['song-item-container']}>
           <p>song name:</p>
-          <p>{memory.song_name}</p>
+          <p className={styles['song-name']}>{memory.song_name}</p>
         </div>
         <div className={styles['song-item-container']}>
           <p>album:</p>
-          <p>{memory.album_name}</p>
+          <p className={styles['album-name']}>{memory.album_name}</p>
         </div>
         <div className={styles['song-item-container']}>
           <p>artist:</p>
-          <p>{memory.artist}</p>
+          <p className={styles['artist']}>{memory.artist}</p>
         </div>
       </div>
       <div className={styles['encode-btn-container']}>

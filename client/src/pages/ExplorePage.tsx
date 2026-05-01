@@ -48,7 +48,7 @@ const ExplorePage = () => {
 
   return (
     <>
-      <div className={styles['exlore-page-container']}>
+      <div className={styles['explore-page-container']}>
         <div className={styles['all-filters-container']}>
           <div className={styles['emotion-menu-container']}>
             <EmotionMenu 

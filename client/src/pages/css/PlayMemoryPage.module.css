@@ -19,11 +19,14 @@
   gap: 0rem; 
 }
 
-.song-item-container p {
+.song-item-container p, 
+.encoding-text,
+.decode-instructions, 
+.decode-msg-label, 
+.decoded-msg-text  {
   padding: 0.2rem 0; 
   margin: 0; 
   font-family: 'DM Mono', monospace;
-  color: #7a3a10;
 }
 
 .song-info-container {
@@ -83,7 +86,7 @@
 }
 
 .decoded-msg-container{
-  padding: 0.5rem 0; 
+  padding: 1rem; 
   background: rgba(254, 232, 213, 0.5);
   cursor: pointer;
   /* border: 1px solid rgba(58, 48, 40, 0.3); */
@@ -95,7 +98,7 @@
 
 .decode-msg-label, .decoded-msg-text {
   margin: 0.5rem 0; 
-  padding: 0 1rem;
+  padding: 0; 
 }
 
 .download-link-btn {
@@ -120,13 +123,30 @@
 
 /* text */
 
-.song-item-container p, 
-.encoding-text, 
+.song-item-container p:first-child, 
+.encoding-text,
 .decode-instructions, 
-.decoded-msg-container p {
-  color: #67310f; 
-  font-family: 'DM Mono', monospace;
+.decode-msg-label, 
+.decoded-msg-text {
+  color: #7a3a10;
 }
+
+.memory-id {
+  color: #4f0867;
+}
+
+.song-name {
+  color: #a04a10;
+}
+
+.album-name {
+  color: #0b4209;
+}
+
+.artist {
+  color: #b02878;
+}
+
 
 @media (min-width: 768px) {
   .download-link-btn {
@@ -157,8 +177,9 @@
   }
 
   .decoded-msg-container {
-    width: 500px; 
+    width: 430px; 
     margin: 1.5rem auto 0; 
+    padding: 1.2rem 1.7rem; 
   }
 
   .play-memory-page-btn { 
