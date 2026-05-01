@@ -5,6 +5,17 @@ import { promisify } from 'util' // a utility from nodes built in util module th
 import fs from 'fs' //for creating and checking files/folders 
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3' //
+
+//create R2 client 
+const r2Client = new S3Client({
+  region: "auto", //lets CloudFlare handle the region 
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`, //R2's S3 API endpoint 
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!, 
+    secretAccessKey: process.env.SECRET_ACCESS_KEY!, 
+  },
+})
 
 //gets absolute path to service folder
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -37,3 +48,29 @@ export const downloadWav = async (song: string, artist: string, memoryId: string
     throw error //rethrow error so that the route that called download wav knows something went wrong and can handle it, by rethrowing the error block in my route can catch it and alert me tha theres an error 
   }
 }
+
+//Upload file, returns public URL 
+export const uploadToR2 = async (filepath: string, key: string): Promise<string> => { 
+  const fileContent = fs.readFileSync(filepath) //reads file into memory as raw bites so it can be sent to R2 
+
+  await r2Client.send(new PutObjectCommand({ //initial file upload instructions 
+    Bucket: process.env.R2_BUCKET_NAME!, 
+    Key: key, //filename/path inside the bucket 
+    Body: fileContent, //content of file as buffer (ray bites)
+    ContentType: 'audio/wav'  //tells R2 what kind of file so browsers can stream it correctly
+  }))
+
+  return `${process.env.R2_PUBLIC_URL}/${key}` //returns public url so the frontend can play the file directly from R2
+}
+
+//download song files from R2 
+export const downloadFromR2 = async (key: string, destPath: string): Promise<void> => {
+  const publicUrl = `${process.env.R2_PUBLIC_URL}`
+  
+  const response = await fetch(publicUrl) //fetches file from R2's public URL 
+  if (!response.ok) throw new Error (`Failed to download from R2: ${response.status}`)
+
+  const buffer = Buffer.from(await response.arrayBuffer()) //converts response body into a Node.js buffer 
+
+  fs.writeFileSync(destPath, buffer) //writes file to distination path so Flask service can read it for decoding
+} 
