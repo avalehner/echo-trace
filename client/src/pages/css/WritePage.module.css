@@ -34,7 +34,7 @@
 .season-menu-container select {
   font-family: 'DM Mono', monospace;
   font-weight: 100; 
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   color: #67310f;
   background: rgba(245, 239, 224, 0.5);
@@ -82,7 +82,7 @@
 /* inputs */
 .text-input {
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   color: #67310f;
   background: rgba(245, 239, 224, 0.5);
@@ -115,7 +115,7 @@
 
 .emotion-menu-container p, .season-menu-container p {
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   color: #492209;
   margin: 0;
@@ -127,7 +127,7 @@
 
 .write-page-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;

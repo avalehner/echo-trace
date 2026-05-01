@@ -22,7 +22,7 @@
 .year-menu-container select {
   font-family: 'DM Mono', monospace;
   font-weight: 100; 
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   color: #7a3a10;
   background: rgba(245, 239, 224, 0.5);
@@ -51,7 +51,7 @@
 
 .reset-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 0.6rem; 
+  font-size: 0.65rem; 
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #7a3a10;
@@ -85,7 +85,7 @@
 
 .empty-state {
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   color: #5a3010;
   padding: 24px 14px;
@@ -113,7 +113,7 @@
   .memories-container {
       display: grid; 
       grid-template-columns: repeat(4, 1fr); 
-      max-width: 80%; 
+      max-width: 1400px; 
       margin: 0 auto; 
   }
 
