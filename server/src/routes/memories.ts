@@ -6,6 +6,8 @@ import fs from 'fs'
 import path from 'path'
 import { audioDir } from '../services/audioService'
 import { validate } from 'uuid'
+import { uploadToR2, downloadFromR2 } from '../services/audioService'
+import os from 'os' //built in node module giving acces to the system temp directory 
 
 //create router instance 
 const memoriesRouter = Router()
@@ -32,7 +34,13 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
     const artist = memoryData.artist
     const memoryId = memoryData.id 
 
-    const wavFilePath = path.resolve(audioDir, `${memoryId}.wav`) //construct file path before download 
+    //if this memory has already been encoded return stored R2 URL, dont need to reencode 
+    if (memoryData.encoded_audio_url) {
+      res.status(200).json({url: memoryData.encoded_audio_url})
+      return 
+    }
+
+    const wavFilePath = path.resolve(audioDir, `${memoryId}.wav`) //construct file path before download from yt-dlp
     if (!fs.existsSync(wavFilePath)) await downloadWav(songName, artist, memoryId) //downloads file only if it doesnt exist 
 
     //call encoder 
@@ -52,8 +60,16 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
 
     if(!encoderResponse.ok) throw new Error (`Encoder error: ${encoderResponse.status}`)
 
-    const { output_path } = await encoderResponse.json()
-    res.sendFile(output_path) //serves file, frontend decides what to do with it
+    const { output_path } = await encoderResponse.json() //where flask saved the encoded file locally 
+
+    //upload encoded file to R2, get back the public URL 
+    const r2Key = `${memoryId}_encoded.wav`
+    const encodedAudioUrl = await uploadToR2(output_path, r2Key)
+
+    await pool.query(`UPDATE memories SET encoded_audio_url = $1 WHERE id = $2`, [encodedAudioUrl, memoryId])
+
+    //return the URL so frontend can play it directly form R2 
+    res.status(200).json({ url: encodedAudioUrl })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     res.status(500)
@@ -66,36 +82,33 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
   try {   
     const { id } = req.params 
 
-    //imports location of audio directory from audio service 
-    
     //makes sure valid uuid input
     if (!validate(id)) {
       res.status(400).json({ error: 'Invalid id' })
       return 
     }
-    if (!fs.existsSync(audioDir)) {
-      res.status(500).json({ error: 'Audio directory not found' })
-      return 
-    }
 
-    //gets filepath for encoded wav file 
-    const encodedWavFilePath = path.resolve(audioDir, `${id}_encoded.wav`)
+    //construct R2 key 
+    const r2key = `${id}_encoded.wav`
 
-    //makes sure encoded wav file exists
-    if (!fs.existsSync(encodedWavFilePath)) {
-      res.status(404).json({ error: 'Encoded WAV not found - has this memory been downloaded yet? '})
-      return
-    }
+    //download the encoded file from R2 into the system temp directory 
+    const tmpPath = path.join(os.tmpdir(), `${id}_encoded.wav`)
 
+    await downloadFromR2(r2key, tmpPath)
+
+    //pass the local temp file to Flask for decoding 
     const decoderResponse = await fetch (`${process.env.FLASK_URL}/decode`, {
       method: 'POST', 
       headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify({
-        wav_path: encodedWavFilePath
+        wav_path: tmpPath
       })
     })
 
     if (!decoderResponse.ok) throw new Error(`Decoder error: ${decoderResponse.status}`)
+
+    //clean up the temp file after decoding 
+    fs.unlinkSync(tmpPath)
 
     const decodedMessage = await decoderResponse.json()
     res.status(200)
