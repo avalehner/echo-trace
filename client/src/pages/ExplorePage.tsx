@@ -73,7 +73,7 @@ const ExplorePage = () => {
           </div>
         </div> 
         <div className={styles['memories-container']}>
-          {memories.length === 0 ? <p>no memories found </p> : renderMemories()}
+          {memories.length === 0 ? <p className={styles['no-memories']}>no memories found </p> : renderMemories()}
         </div>
       </div>
     </>

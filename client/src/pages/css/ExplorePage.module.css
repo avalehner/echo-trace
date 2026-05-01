@@ -83,7 +83,7 @@
 
 /* ─── Empty state ────────────────────────────────────────────── */
 
-.empty-state {
+.empty-state, .no-memories {
   font-family: 'DM Mono', monospace;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
