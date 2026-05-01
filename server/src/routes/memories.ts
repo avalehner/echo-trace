@@ -36,7 +36,7 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
     if (!fs.existsSync(wavFilePath)) await downloadWav(songName, artist, memoryId) //downloads file only if it doesnt exist 
 
     //call encoder 
-    const encoderResponse = await fetch(`http://localhost:5001/encode`, {
+    const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
       method: 'POST', 
       headers: { 'Content-Type': 'application/json' }, 
       body: JSON.stringify({
@@ -87,7 +87,7 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
       return
     }
 
-    const decoderResponse = await fetch (`http://localhost:5001/decode`, {
+    const decoderResponse = await fetch (`${process.env.FLASK_URL}/decode`, {
       method: 'POST', 
       headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify({
