@@ -91,6 +91,10 @@
   padding: 24px 14px;
 }
 
+.no-memories{
+  text-align: center; 
+}
+
 /* ─── Desktop (768px+) ───────────────────────────────────────── */
 
 @media (min-width: 768px) {
