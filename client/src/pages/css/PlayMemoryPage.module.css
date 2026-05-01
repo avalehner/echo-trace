@@ -1,7 +1,7 @@
 .your-memory-container {
   border-radius: 25px; 
-  margin: 0 1rem; 
-  padding: 0.5rem 0 2.3rem;
+  margin: 1.5rem 1rem 0; 
+  padding: 0.3rem 0.5rem 0.1rem;
   background: rgba(245, 239, 224, 0.2);
 }
 
@@ -27,19 +27,20 @@
   padding: 0.2rem 0; 
   margin: 0; 
   font-family: 'DM Mono', monospace;
+  font-size: 0.8rem; 
 }
 
 .song-info-container {
   padding: 1rem; 
   background: rgba(254, 232, 213, 0.5);
   /* border: 1px solid rgba(58, 48, 40, 0.3); */
-  margin: 1rem;
+  margin: 1rem 1rem 1rem;
   border-radius: 20px; 
 }
 
 .play-memory-page-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 9px;
+  font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -61,13 +62,14 @@
   transform: scale(0.97);
 }
 
-.encode-btn-container {
+.encode-btn {
   display: flex; 
   justify-content: center; 
-  margin-top: 0.5rem; 
+  margin: 1.5rem auto 1.6rem; 
 }
 
 .encoding-text {
+  margin: 1rem 0 1.5rem; 
   text-align: center; 
 }
 
@@ -80,7 +82,7 @@
 
 audio {
   width: 300px; 
-  margin: 0 auto; 
+  margin: 0.5rem auto 1rem; 
 }
 
 .decode-instructions{
@@ -92,7 +94,7 @@ audio {
   background: rgba(254, 232, 213, 0.5);
   cursor: pointer;
   /* border: 1px solid rgba(58, 48, 40, 0.3); */
-  margin: 1rem 1rem 1.5rem;
+  margin: 1rem;
   border-radius: 20px; 
   color: #7a3a10;
   font-family: 'DM Mono', monospace;
@@ -108,7 +110,7 @@ audio {
   display: flex; 
   justify-content: center; 
   width: 68%; 
-  margin:0 auto; 
+  margin: 1.5rem auto 0; 
   border-radius: 6px; 
   padding: 0.5rem 0.8rem; 
   background: rgba(254, 232, 213, 0.5);
@@ -180,7 +182,7 @@ audio {
 
   .decoded-msg-container {
     width: 430px; 
-    margin: 1.5rem auto 0; 
+    margin: 1.5rem auto 1rem; 
     padding: 1.2rem 1.7rem; 
   }
 
@@ -192,5 +194,9 @@ audio {
   .download-link-btn {
     margin-top: 2rem; 
     width: 300px; 
+  }
+
+  audio {
+    margin: 0.3rem auto 0.4rem; 
   }
 }

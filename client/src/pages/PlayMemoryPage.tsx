@@ -114,10 +114,8 @@ const PlayMemoryPage = () => {
           <p className={styles['artist']}>{memory.artist}</p>
         </div>
       </div>
-      <div className={styles['encode-btn-container']}>
-        {!encodedSongUrl &&(
-        <button className={styles['play-memory-page-btn']} onClick={()=> handleEncodedSong(memory.id)} >encode your memory</button>)}
-      </div>
+      {!encodedSongUrl &&(
+      <button className={`${styles['play-memory-page-btn']} ${styles['encode-btn']}`} onClick={()=> handleEncodedSong(memory.id)} >encode your memory</button>)}
       {isEncoding && <p className={styles['encoding-text']}>encoding your memory...</p>}
       {encodedSongUrl && !decodedMemory && !isDecoding && <p className={styles['decode-instructions']}>press play to decode your memory!</p>}
       {encodedSongUrl && (
