@@ -54,6 +54,7 @@ export const generateEncodedSong = async (id: string): Promise<string> => {
   const response = await fetch(`${API_URL}/api/memories/${id}/download`)
   if (!response.ok) throw new Error (`Server error: ${response.status}`)
   const data = await response.json()
+  console.log('encode response data:', data) 
   return data.url //R2 public URL 
 }
 
