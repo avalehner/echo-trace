@@ -3,11 +3,13 @@ import { exec } from 'child_process' //built in node module that lets you spawn 
 // error: an error object, stdout: everything the command wrote to standard output (string), stderr: everything written to standard error (string)
 import { promisify } from 'util' // a utility from nodes built in util module that converst callback style function into one that returns a promise so async await can be used
 import fs from 'fs' //for creating and checking files/folders 
+import os from 'os' //built in node module that igve information about the operating system 
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3' 
 import 'dotenv/config'
-
+import ffmpegStatic from 'ffmpeg-static'
+ 
 
 console.log('R2_ACCOUNT_ID:', process.env.R2_ACCOUNT_ID)
 console.log('R2_ACCESS_KEY_ID:', process.env.R2_ACCESS_KEY_ID)
@@ -79,3 +81,44 @@ export const downloadFromR2 = async (key: string, destPath: string): Promise<voi
 
   fs.writeFileSync(destPath, buffer) //writes file to distination path so Flask service can read it for decoding
 } 
+
+export const downloadAndConvertPreview = async (song: string, artist: string, memoryId: string) => {
+  const deezerResponse = await fetch(`https://api.deezer.com/search?q=artist:${artist} track:${song}`)
+
+  if (!deezerResponse.ok) throw new Error (`Deezer error: ${deezerResponse.status}`)
+  
+  const previewData = await deezerResponse.json()
+  const previewMp3Url = previewData.data[0]?.preview 
+  if (!previewMp3Url) throw new Error ('No results/preview is null')
+
+  // os.tmpdir() returns the system temp folder (/var/folders/ on Mac)
+  // path.join builds the full path: e.g. /tmp/abc123.mp3
+  //these files dont exist yet, we are declaring them to use later
+  const mp3Path = path.join(os.tmpdir(), `${memoryId}.mp3`)
+  const wavPath = path.join(os.tmpdir(), `${memoryId}.wav`)
+
+  // makes an HTTP GET request to the Deezer CDN URL
+  // the response body is the raw MP3 audio bytes (not JSON this time)
+  const mp3Response = await fetch(previewMp3Url)
+
+  if (!mp3Response.ok) throw new Error (`Failed to download preview: ${mp3Response.status} `)
+
+  // .arrayBuffer() reads the entire response body as raw bytes
+  // Buffer.from() wraps those bytes into a Node.js Buffer (which fs can write to disk)
+  //when we fetch the mp3 file from the internet, the result comes back as a stream of raw bytes 
+  //and array buffer is a low level javascript object that holds raw binary data
+  const buffer = Buffer.from(await mp3Response.arrayBuffer())
+
+  // writes the buffer (the MP3 file's bytes) to disk at /tmp/abc123.mp3
+  // now ffmpeg can read it as a real file
+  fs.writeFileSync(mp3Path, buffer)
+
+  //ffmpeg converts mp3 to wav 
+  const ffmpegCommand = `"${ffmpegStatic}" -y -i "${mp3Path}" -ar 48000 "${wavPath}"`
+  await execAsync(ffmpegCommand)
+
+  //delete mp3 temp file once ffmpeg is done with it 
+  fs.unlinkSync(mp3Path)
+
+  return wavPath
+}
