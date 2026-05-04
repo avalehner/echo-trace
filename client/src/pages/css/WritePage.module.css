@@ -73,10 +73,13 @@
 }
 
 .after-submit-btns-container {
-  margin-top: 1.2rem; 
+  margin: 1.3rem auto; 
   display: flex; 
   justify-content: center; 
-  gap: 0.2rem; 
+  flex-direction: column; 
+  align-items: center;
+  gap: 0.5rem; 
+  width: 60%; 
 }
 
 /* inputs */

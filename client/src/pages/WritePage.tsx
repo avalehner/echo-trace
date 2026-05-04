@@ -106,7 +106,7 @@ const handleRefresh = () => {
               value={searchQuery}
               onChange={(e)=> setSearchQuery(e.target.value)}
             />
-            <button className={styles['write-page-btn']} onClick={getSongs}>{searching ? 'searching...' : 'SEARCH'}</button>
+            <button className={styles['write-page-btn']} onClick={getSongs}>{searching ? 'searching' : 'SEARCH'}</button>
           </div>
           {searchResults.length > 0 && 
             <div className={styles['refresh-btn-container']} >
