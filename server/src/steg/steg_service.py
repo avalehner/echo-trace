@@ -51,7 +51,11 @@ def decode_route():
   try: 
     wav_url = request.json.get('wav_url')
     tmp_path = f'/tmp/decode_{os.urandom(8).hex()}.wav' # unique temp path 
-    urllib.request.urlretrieve(wav_url, tmp_path) # download from R2
+    # This spoofs a browser User-Agent, which Cloudflare accepts. `urllib.request.urlopen` and `Request` are both built-in Python, no new imports needed.
+    req = urllib.request.Request(wav_url, headers={'User-Agent': 'Mozilla/5.0'})# download from R2
+    with urllib.request.urlopen(req) as response: 
+      with open(tmp_path, 'wb') as f: 
+        f.write(response.read())
     decoded_message = decode(tmp_path)
     os.remove(tmp_path)
     return jsonify({ 'decoded_message': decoded_message })
