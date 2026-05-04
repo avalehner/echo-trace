@@ -4,12 +4,12 @@ html, body {
   margin: 0; 
   padding: 0; 
   background:
-    linear-gradient(to bottom, rgb(136, 136, 192, 0.35),rgba(255, 255, 255, 0)), 
+    /* linear-gradient(to bottom, rgb(136, 136, 192, 0.35),rgba(255, 255, 255, 0)),  */
     radial-gradient(ellipse 90% 55% at 50% 0%, #e07050cc 0%, transparent 55%),
-    radial-gradient(ellipse 70% 50% at 10% 45%, #39673b66 0%, transparent 50%),
-    radial-gradient(ellipse 70% 50% at 90% 55%, rgba(150, 105, 180, 0.533) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 50% at 10% 45%, #39673b66 0%, transparent 40%),
+    radial-gradient(ellipse 70% 50% at 90% 55%, rgba(150, 105, 180, 0.533) 0%, transparent 40%),
     radial-gradient(ellipse 90% 55% at 50% 100%, rgba(156, 156, 198, 0.467) 0%, transparent 55%),
-    linear-gradient(to top, rgb(136, 136, 192, 0.3),rgba(255, 255, 255, 0)), 
+    /* linear-gradient(to top, rgb(136, 136, 192, 0.3),rgba(255, 255, 255, 0)),  */
     #cec5b0;
   min-height: 100vh;
   background-attachment: fixed;
