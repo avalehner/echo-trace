@@ -83,7 +83,8 @@ export const downloadFromR2 = async (key: string, destPath: string): Promise<voi
 } 
 
 export const downloadAndConvertPreview = async (song: string, artist: string, memoryId: string) => {
-  const deezerResponse = await fetch(`https://api.deezer.com/search?q=artist:${artist} track:${song}`)
+  const query = encodeURIComponent(`artist:"${artist}" track:"${song}"`)
+  const deezerResponse = await fetch(`https://api.deezer.com/search?q=${query}`)
 
   if (!deezerResponse.ok) throw new Error (`Deezer error: ${deezerResponse.status}`)
   
@@ -112,6 +113,8 @@ export const downloadAndConvertPreview = async (song: string, artist: string, me
   // writes the buffer (the MP3 file's bytes) to disk at /tmp/abc123.mp3
   // now ffmpeg can read it as a real file
   fs.writeFileSync(mp3Path, buffer)
+
+  if (!ffmpegStatic) throw new Error('ffmpeg binary not found — ffmpeg-static returned null')
 
   //ffmpeg converts mp3 to wav 
   const ffmpegCommand = `"${ffmpegStatic}" -y -i "${mp3Path}" -ar 48000 "${wavPath}"`
