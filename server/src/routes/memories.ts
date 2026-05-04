@@ -40,7 +40,7 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
 
     //only download if file doesnt already exist 
     const wavFilePath = process.env.NODE_ENV === 'production'
-      ? path.join(os.tmpdir(), `${memoryId}wav`)
+      ? path.join(os.tmpdir(), `${memoryId}.wav`)
       : path.resolve(audioDir, `${memoryId}.wav`)
 
     if (!fs.existsSync(wavFilePath)) {
@@ -52,7 +52,6 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
         await downloadWavYtDlp(songName, artist, memoryId)
       }
     }
-   
 
     //call encoder 
     const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
