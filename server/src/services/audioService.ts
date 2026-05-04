@@ -36,7 +36,7 @@ export const audioDir = path.resolve(__dirname, '../audio')
 
 const execAsync = promisify(exec) //function when called returns a promise that resolves to { stdout, stderr }
 
-export const downloadWav = async (song: string, artist: string, memoryId: string) => {
+export const downloadWavYtDlp = async (song: string, artist: string, memoryId: string) => {
   //check if audio file exists before running, good to do because i am gitignoring the audio file so this is a safety check in case someone clones my repo 
   if (!fs.existsSync(audioDir)) fs.mkdirSync(audioDir)
   
