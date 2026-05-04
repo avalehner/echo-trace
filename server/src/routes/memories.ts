@@ -1,12 +1,10 @@
 import { Router } from 'express'
 import type { Request, Response } from 'express'
 import pool from "../db"
-import { downloadWav } from '../services/audioService'
+import { downloadWavYtDlp, audioDir, downloadAndConvertPreview, uploadToR2, downloadFromR2 } from '../services/audioService'
 import fs from 'fs'
 import path from 'path'
-import { audioDir } from '../services/audioService'
 import { validate } from 'uuid'
-import { uploadToR2, downloadFromR2 } from '../services/audioService'
 import os from 'os' //built in node module giving acces to the system temp directory 
 
 //create router instance 
@@ -40,8 +38,21 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
       return 
     }
 
-    const wavFilePath = path.resolve(audioDir, `${memoryId}.wav`) //construct file path before download from yt-dlp
-    if (!fs.existsSync(wavFilePath)) await downloadWav(songName, artist, memoryId) //downloads file only if it doesnt exist 
+    //only download if file doesnt already exist 
+    const wavFilePath = process.env.NODE_ENV === 'production'
+      ? path.join(os.tmpdir(), `${memoryId}wav`)
+      : path.resolve(audioDir, `${memoryId}.wav`)
+
+    if (!fs.existsSync(wavFilePath)) {
+      if (process.env.NODE_ENV === 'production') {
+        //production: deezer 30 second preview 
+        await downloadAndConvertPreview(songName, artist, memoryId)
+      } else {
+        //local dev: yt-dlp full song 
+        await downloadWavYtDlp(songName, artist, memoryId)
+      }
+    }
+   
 
     //call encoder 
     const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
