@@ -110,7 +110,7 @@ audio {
   display: flex; 
   justify-content: center; 
   width: 68%; 
-  margin: 1.5rem auto 0; 
+  margin: 1.5rem auto 4rem; 
   border-radius: 6px; 
   padding: 0.5rem 0.8rem; 
   background: rgba(254, 232, 213, 0.5);
