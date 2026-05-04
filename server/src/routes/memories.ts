@@ -33,7 +33,7 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
     const memoryId = memoryData.id 
 
     //if this memory has already been encoded return stored R2 URL, dont need to reencode 
-    if (memoryData.encoded_audio_url) {
+    if (memoryData.encoded_audio_url?.startsWith('http')) {
       res.status(200).json({url: memoryData.encoded_audio_url})
       return 
     }
@@ -123,7 +123,7 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
 
     //return the URL so frontend can play it directly form R2 
     res.status(200).json({ url: encodedAudioUrl })
-    
+
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     res.status(500)
