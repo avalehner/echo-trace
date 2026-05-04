@@ -5,6 +5,7 @@ import base64
 from flask import Flask, request, jsonify 
 from encoder import encode 
 from decoder import decode 
+import ssl 
 
 #same as const app: Express = express()
 steg_service = Flask(__name__) #__name__ is a built in python variable that holds the name of the current module. when the file is imported by another file __name__ is set to that filename
@@ -50,12 +51,20 @@ def encode_route():
 def decode_route(): 
   try: 
     wav_url = request.json.get('wav_url')
+    print(f'decode called with wav_url: {wav_url}')
     tmp_path = f'/tmp/decode_{os.urandom(8).hex()}.wav' # unique temp path 
+    
     # This spoofs a browser User-Agent, which Cloudflare accepts. `urllib.request.urlopen` and `Request` are both built-in Python, no new imports needed.
-    req = urllib.request.Request(wav_url, headers={'User-Agent': 'Mozilla/5.0'})# download from R2
-    with urllib.request.urlopen(req) as response: 
-      with open(tmp_path, 'wb') as f: 
+    req = urllib.request.Request(wav_url, headers={'User-Agent': 'Mozilla/5.0'})
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    response = urllib.request.urlopen(req, context=ssl_context)
+    with open(tmp_path, 'wb') as f:
         f.write(response.read())
+    response.close()
+    
+    #calll decode function 
     decoded_message = decode(tmp_path)
     os.remove(tmp_path)
     return jsonify({ 'decoded_message': decoded_message })
