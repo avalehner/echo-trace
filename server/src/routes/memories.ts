@@ -115,7 +115,11 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
       })
     })
 
-    if (!decoderResponse.ok) throw new Error(`Decoder error: ${decoderResponse.status}`)
+    if (!decoderResponse.ok) {
+      const errorBody = await decoderResponse.text() //read Flask's actual error message 
+      console.error('Flask decode error:', errorBody)
+      throw new Error(`Decoder error: ${decoderResponse.status} - ${errorBody}`)
+    }
 
     //clean up the temp file after decoding 
     fs.unlinkSync(tmpPath)
