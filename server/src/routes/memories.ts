@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import type { Request, Response } from 'express'
 import pool from "../db"
-import { downloadWavYtDlp, audioDir, downloadAndConvertPreview, uploadToR2, downloadFromR2 } from '../services/audioService'
+import { downloadWavYtDlp, audioDir, downloadAndConvertPreview, uploadToR2 } from '../services/audioService'
 import fs from 'fs'
 import path from 'path'
 import { validate } from 'uuid'
@@ -53,33 +53,77 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
       }
     }
 
-    //call encoder 
-    const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
-      method: 'POST', 
-      headers: { 'Content-Type': 'application/json' }, 
-      body: JSON.stringify({
-        wav_path: wavFilePath, 
-        json_string: JSON.stringify({
-          emotion: memoryData.emotion, 
-          season: memoryData.season, 
-          year: memoryData.year, 
-          memory_fragment: memoryData.memory_fragment
-        }) 
+    //extract memory fields into json string once, reused in both branches below 
+    const memoryJson = JSON.stringify({
+      emotion: memoryData.emotion, 
+      season: memoryData.season, 
+      year: memoryData.year, 
+      memory_fragment: memoryData.memory_fragment
+    })
+
+    const r2Key = `${memoryId}_encoded.wav` // the key (filename) this file will have in R2
+    let encodedAudioUrl: string 
+
+    if (process.env.NODE_ENV === 'production') {
+      //production: express and flask are on separate containers, can't share file paths 
+      //solution: read the WAV bytes, convert to base64 string, send over HTTP to Flask 
+
+      //fs.readFileSync reads the WAV file from Express' /tmp into memory as a Buffer
+      //.toString('base64') converts those raw bytes to a base64 string (safe to send in JSON)
+      const wavBase64 = fs.readFileSync(wavFilePath).toString('base64')
+
+      const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json'}, 
+        body: JSON.stringify({ wav_base64: wavBase64, json_string: memoryJson })
+        //send the base64 WAV and the memory JSON to Flask 
       })
-    }) 
 
-    if(!encoderResponse.ok) throw new Error (`Encoder error: ${encoderResponse.status}`)
+      if (!encoderResponse.ok) throw new Error(`Encoder error: ${encoderResponse.status}`)
 
-    const { output_path } = await encoderResponse.json() //where flask saved the encoded file locally 
+      //Flask returns the encoded WAV as a base64 string 
+      const { encoded_base64 } = await encoderResponse.json()
 
-    //upload encoded file to R2, get back the public URL 
-    const r2Key = `${memoryId}_encoded.wav`
-    const encodedAudioUrl = await uploadToR2(output_path, r2Key)
+      //define a temp path on Express' container to write the encoded WAV
+      const tmpEncodedPath = path.join(os.tmpdir(), `${memoryId}_encoded.wav`)
+
+      //converts the base64 string back to wav bytes
+      //writes those bytes to disk so uploadToR2 can read the file 
+      fs.writeFileSync(tmpEncodedPath, Buffer.from(encoded_base64, 'base64'))
+
+      encodedAudioUrl = await uploadToR2(tmpEncodedPath, r2Key)
+      //upload the encoded WAV to R2, get back the public URL 
+
+      fs.unlinkSync(tmpEncodedPath)
+      //delete the temp encoded WAV 
+    } else {
+      const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({
+          wav_path: wavFilePath, 
+          json_string: JSON.stringify({
+            emotion: memoryData.emotion, 
+            season: memoryData.season, 
+            year: memoryData.year, 
+            memory_fragment: memoryData.memory_fragment
+          }) 
+        })
+      }) 
+
+      if(!encoderResponse.ok) throw new Error (`Encoder error: ${encoderResponse.status}`)
+
+      const { output_path } = await encoderResponse.json() //where flask saved the encoded file locally 
+
+      //upload encoded file to R2, get back the public URL 
+      encodedAudioUrl = await uploadToR2(output_path, r2Key)
+    }
 
     await pool.query(`UPDATE memories SET encoded_audio_url = $1 WHERE id = $2`, [encodedAudioUrl, memoryId])
 
     //return the URL so frontend can play it directly form R2 
     res.status(200).json({ url: encodedAudioUrl })
+    
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     res.status(500)
@@ -101,17 +145,12 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
     //construct R2 key 
     const r2key = `${id}_encoded.wav`
 
-    //download the encoded file from R2 into the system temp directory 
-    const tmpPath = path.join(os.tmpdir(), `${id}_encoded.wav`)
-
-    await downloadFromR2(r2key, tmpPath)
-
     //pass the local temp file to Flask for decoding 
     const decoderResponse = await fetch (`${process.env.FLASK_URL}/decode`, {
       method: 'POST', 
       headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify({
-        wav_path: tmpPath
+        wav_url: `${process.env.R2_PUBLIC_URL}/${r2key}` //gives public url to flask so it can download from R2 directly
       })
     })
 
@@ -120,9 +159,6 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
       console.error('Flask decode error:', errorBody)
       throw new Error(`Decoder error: ${decoderResponse.status} - ${errorBody}`)
     }
-
-    //clean up the temp file after decoding 
-    fs.unlinkSync(tmpPath)
 
     const decodedMessage = await decoderResponse.json()
     res.status(200)
