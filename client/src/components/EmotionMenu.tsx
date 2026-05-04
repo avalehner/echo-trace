@@ -14,6 +14,7 @@ const EmotionMenu = ({ emotion, setEmotion}: EmotionMenuProps) => {
         <option value="desperate">desperate</option>
         <option value="ethereal">ethereal</option>
         <option value="daring">daring</option>
+        <option value="high">high</option>
         <option value="dark">dark</option>
         <option value="warm">warm</option>
         <option value="wonder">wonder</option>
