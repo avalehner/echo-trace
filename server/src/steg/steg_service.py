@@ -27,7 +27,7 @@ def encode_route():
       with open(tmp_path, 'wb') as f: #'wb' = write binary - writes those bytes as a WAV file to flask
         f.write(base64.b64decode(wav_base64)) #converst the base64 string back to raw bytes 
 
-      output_filename = encode(tmp_path, json_string) #call the existing enode function, saves encoded wav to tmp
+      output_filename, interval  = encode(tmp_path, json_string) #call the existing enode function, saves encoded wav to tmp
 
       #delete the original temp WAV 
       os.remove(tmp_path)
@@ -38,11 +38,11 @@ def encode_route():
       #delete encoded temp WAV, we've read it to memory no longer need it on disk 
       os.remove(output_filename)
 
-      return jsonify({ 'encoded_base64': encoded_base64}) #return encoded wave as base64 
+      return jsonify({ 'encoded_base64': encoded_base64, 'interval': interval }) #return encoded wave as base64 
     else: 
       # local dev: flask and express share the same filesystem, path works directly 
-      output_filename = encode(wav_path, json_string)
-      return jsonify({ 'output_path': output_filename }) #python dictionary being converted to JSON
+      output_filename, interval = encode(wav_path, json_string)
+      return jsonify({ 'output_path': output_filename, 'interval': interval }) #python dictionary being converted to JSON
   except Exception as e: #equivalent of catch(error)
     return jsonify({ 'error': str(e) }), 500 # str(e) converts the error to a string like error.message; sets status code to 500
 
@@ -51,6 +51,7 @@ def encode_route():
 def decode_route(): 
   try: 
     wav_url = request.json.get('wav_url')
+    interval = request.json.get('interval', 1600)
     print(f'decode called with wav_url: {wav_url}')
     tmp_path = f'/tmp/decode_{os.urandom(8).hex()}.wav' # unique temp path 
     
@@ -65,7 +66,7 @@ def decode_route():
     response.close()
     
     #calll decode function 
-    decoded_message = decode(tmp_path)
+    decoded_message = decode(tmp_path, interval)
     os.remove(tmp_path)
     return jsonify({ 'decoded_message': decoded_message })
   except Exception as e: 
