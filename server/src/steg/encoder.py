@@ -70,7 +70,8 @@ def encode (wav_path, json_string):
 
   print(message_bits)
 
-  interval = 1600 #fixed interval, makes decoding easier 
+  bits_needed = len(message_bits)
+  interval = len(audio_data) // bits_needed if bits_needed * 1600 > len(audio_data) else 1600 # // integer division 
 
   #gives me the bit and the index of the bit 
   for i, bit in enumerate(message_bits): #enumerate gets both index and value while looping 
@@ -98,7 +99,7 @@ def encode (wav_path, json_string):
     output_wav.setframerate(frame_rate)
     output_wav.writeframes(raw_data_modified)
   
-  return output_filename
+  return output_filename, interval 
 
 # if __name__ == '__main__': 
 #    encode('../audio/ab81e378-8f01-4052-bc45-9b2fec13e547.wav', '{"test": "data"}' )

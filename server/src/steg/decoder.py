@@ -28,7 +28,7 @@ import json #built into python, lets me parse and stringify JSON
 # convert integers back to raw bytes
 # write new WAV file with same metadata but modified audio data
 
-def decode (wav_path): 
+def decode (wav_path, interval=1600): 
   #opens wave file in binary, rb stands for read binary, wave.open takes the path string and opens the actual file
   wav_file = wave.open(wav_path, 'rb')
 
@@ -61,7 +61,7 @@ def decode (wav_path):
   audio_data = audio_data.copy()
 
   #decoding logic 
-  interval = 1600 #fixed interval between samples
+  # interval = 1600 #fixed interval between samples
   extracted_bits = ''
   message = ''
 
