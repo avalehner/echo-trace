@@ -11,7 +11,7 @@ export const getMemories = async (filters?: MemoryFiltersTypes): Promise<MemoryT
 
   const response = await fetch (`${API_URL}/api/memories?${params.toString()}`) //when .toString() is called it returns a formatted query string 
 
-  if(!response.ok) throw new Error(`Server error: ${response.status}`)
+  if(!response.ok) throw new Error(`Server error (getMemories memoriesService.ts): ${response.status}`)
   
   const memoriesData = await response.json()
   return memoriesData
@@ -20,7 +20,7 @@ export const getMemories = async (filters?: MemoryFiltersTypes): Promise<MemoryT
 export const getMemoryById = async(id: string): Promise<MemoryTypes> => {
   const response = await fetch(`${API_URL}/api/memories/${id}`)
 
-  if(!response.ok) throw new Error(`Server error: ${response.status}`)
+  if(!response.ok) throw new Error(`Server error (getMemoryById memoriesService.ts): ${response.status}`)
 
   const memoryData = await response.json()
   return memoryData
@@ -33,7 +33,7 @@ export const createMemory = async (data: NewMemoryTypes): Promise<MemoryTypes> =
     body: JSON.stringify(data), 
   })
 
-  if(!response.ok) throw new Error(`Server error: ${response.status}`)
+  if(!response.ok) throw new Error(`Server error (createMemory memoriesService.ts): ${response.status}`)
   
   const newMemoryData = await response.json()
   return newMemoryData
@@ -44,7 +44,7 @@ export const deleteMemory = async (id: string): Promise<MemoryTypes> => {
     method: 'DELETE', 
   })
 
-  if(!response.ok) throw new Error(`Server error: ${response.status}`)
+  if(!response.ok) throw new Error(`Server error (deleteMemory memoriesService.ts): ${response.status}`)
   
   const deletedMemoryData = await response.json()
   return deletedMemoryData
@@ -52,7 +52,7 @@ export const deleteMemory = async (id: string): Promise<MemoryTypes> => {
 
 export const generateEncodedSong = async (id: string): Promise<string> => {
   const response = await fetch(`${API_URL}/api/memories/${id}/download`)
-  if (!response.ok) throw new Error (`Server error: ${response.status}`)
+  if (!response.ok) throw new Error (`Server error (generateEncodedSong memoriesService.ts): ${response.status}`)
   const data = await response.json()
   console.log('encode response data:', data) 
   return data.url //R2 public URL 
@@ -60,8 +60,8 @@ export const generateEncodedSong = async (id: string): Promise<string> => {
 
 export const decodeSong = async(id: string): Promise<DecodedMemoryTypes> => {
   const response = await fetch(`${API_URL}/api/memories/${id}/decode`)
-  if(!response.ok) throw new Error (`Server error: ${response.status}`)
+  if(!response.ok) throw new Error (`Server error (decodeSong memoriesService.ts): ${response.status}`)
 
   const decodedMemoryData = await response.json()
-  return decodedMemoryData.decoded_message
+  return decodedMemoryData
 }
