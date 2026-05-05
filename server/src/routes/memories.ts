@@ -24,45 +24,40 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
 
     if (!memoryData) {
       res.status(404)
-        .json({ error: 'Memory not found'})
+        .json({ error: 'Memory not found in database'})
       return 
     }
 
-    const songName = memoryData.song_name
-    const artist = memoryData.artist
-    const memoryId = memoryData.id 
-
-    //if this memory has already been encoded return stored R2 URL, dont need to reencode 
+    //if this memory has already been encoded return stored R2 URL, dont need to re-encode 
     if (memoryData.encoded_audio_url?.startsWith('http')) {
       res.status(200).json({url: memoryData.encoded_audio_url})
       return 
     }
 
+    //extract song data from memory data 
+    const songName = memoryData.song_name
+    const artist = memoryData.artist
+    const memoryId = memoryData.id 
+
     //only download if file doesnt already exist 
-    const wavFilePath = process.env.NODE_ENV === 'production'
-      ? path.join(os.tmpdir(), `${memoryId}.wav`)
-      : path.resolve(audioDir, `${memoryId}.wav`)
+    const wavFilePath = path.join(os.tmpdir(), `${memoryId}.wav`)
 
     if (!fs.existsSync(wavFilePath)) {
-      if (process.env.NODE_ENV === 'production') {
-        //production: deezer 30 second preview 
-        await downloadAndConvertPreview(songName, artist, memoryId)
-      } else {
-        //local dev: yt-dlp full song 
-        await downloadWavYtDlp(songName, artist, memoryId)
-      }
-    }
+      //production: deezer 30 second preview 
+      await downloadAndConvertPreview(songName, artist, memoryId)
+    } 
 
     //extract memory fields into json string once, reused in both branches below 
-    const memoryJson = JSON.stringify({
+    const memoryJsonString = JSON.stringify({
       emotion: memoryData.emotion, 
       season: memoryData.season, 
       year: memoryData.year, 
-      memory_fragment: memoryData.memory_fragment
+      memory_fragment: memoryData.memory_fragment, 
     })
 
     const r2Key = `${memoryId}_encoded.wav` // the key (filename) this file will have in R2
     let encodedAudioUrl: string 
+    let encodeInterval: number  
 
     if (process.env.NODE_ENV === 'production') {
       //production: express and flask are on separate containers, can't share file paths 
@@ -75,14 +70,17 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
       const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
         method: 'POST', 
         headers: { 'Content-Type': 'application/json'}, 
-        body: JSON.stringify({ wav_base64: wavBase64, json_string: memoryJson })
+        body: JSON.stringify({ wav_base64: wavBase64, json_string: memoryJsonString })
         //send the base64 WAV and the memory JSON to Flask 
       })
 
       if (!encoderResponse.ok) throw new Error(`Encoder error: ${encoderResponse.status}`)
 
       //Flask returns the encoded WAV as a base64 string 
-      const { encoded_base64 } = await encoderResponse.json()
+      const { encoded_base64, interval } = await encoderResponse.json()
+
+      //grab encode interval 
+      encodeInterval = interval 
 
       //define a temp path on Express' container to write the encoded WAV
       const tmpEncodedPath = path.join(os.tmpdir(), `${memoryId}_encoded.wav`)
@@ -91,12 +89,14 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
       //writes those bytes to disk so uploadToR2 can read the file 
       fs.writeFileSync(tmpEncodedPath, Buffer.from(encoded_base64, 'base64'))
 
-      encodedAudioUrl = await uploadToR2(tmpEncodedPath, r2Key)
       //upload the encoded WAV to R2, get back the public URL 
+      encodedAudioUrl = await uploadToR2(tmpEncodedPath, r2Key)
 
-      fs.unlinkSync(tmpEncodedPath)
       //delete the temp encoded WAV 
+      fs.unlinkSync(tmpEncodedPath)
+
     } else {
+      //development: flask and express share file system 
       const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
@@ -111,17 +111,30 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
         })
       }) 
 
-      if(!encoderResponse.ok) throw new Error (`Encoder error: ${encoderResponse.status}`)
+      if(!encoderResponse.ok) {
+        const errorBody = await encoderResponse.text()
+        console.error('Flask encode error:', errorBody)
+        throw new Error (`Encoder error: ${encoderResponse.status} - ${errorBody}`)
+      }
 
-      const { output_path } = await encoderResponse.json() //where flask saved the encoded file locally 
+      //where flask saved the encoded file locally 
+      const { output_path, interval } = await encoderResponse.json() 
+
+      //grab encode interval 
+      encodeInterval = interval 
 
       //upload encoded file to R2, get back the public URL 
       encodedAudioUrl = await uploadToR2(output_path, r2Key)
     }
 
-    await pool.query(`UPDATE memories SET encoded_audio_url = $1 WHERE id = $2`, [encodedAudioUrl, memoryId])
+    await pool.query(`
+      UPDATE memories 
+      SET encoded_audio_url = $1,  
+      encode_interval = $2 
+      WHERE id = $3
+    `, [encodedAudioUrl, encodeInterval, memoryId])
 
-    //return the URL so frontend can play it directly form R2 
+    //return the URL so frontend can play it directly from R2 
     res.status(200).json({ url: encodedAudioUrl })
 
   } catch (error) {
@@ -142,6 +155,15 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
       return 
     }
 
+    //get interval from db 
+    const dbResponse = await pool.query(`
+      SELECT encode_interval FROM memories
+      WHERE id = $1`, 
+      [id]
+    )
+    const memoryData = dbResponse.rows[0]
+    const decodeInterval = memoryData .encode_interval ?? 1600 // fallback for memories made before this change 
+    
     //construct R2 key 
     const r2key = `${id}_encoded.wav`
 
@@ -150,7 +172,8 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
       method: 'POST', 
       headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify({
-        wav_url: `${process.env.R2_PUBLIC_URL}/${r2key}` //gives public url to flask so it can download from R2 directly
+        wav_url: `${process.env.R2_PUBLIC_URL}/${r2key}`, //gives public url to flask so it can download from R2 directly
+        interval: decodeInterval 
       })
     })
 
@@ -160,9 +183,10 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
       throw new Error(`Decoder error: ${decoderResponse.status} - ${errorBody}`)
     }
 
-    const decodedMessage = await decoderResponse.json()
+    const { decoded_message } = await decoderResponse.json()
+    console.log(decoded_message)
     res.status(200)
-      .json(decodedMessage)
+      .json(decoded_message)
 
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -171,7 +195,6 @@ memoriesRouter.get('/:id/decode', async (req: Request, res:Response) => {
   }
 
 })
-
 
 //get all memories (filter by emotion, year, season)
 memoriesRouter.get('/', async (req: Request, res: Response) => {
