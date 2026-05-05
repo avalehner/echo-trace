@@ -83,45 +83,53 @@ export const downloadFromR2 = async (key: string, destPath: string): Promise<voi
 } 
 
 export const downloadAndConvertPreview = async (song: string, artist: string, memoryId: string) => {
-  const query = encodeURIComponent(`artist:"${artist}" track:"${song}"`)
-  const deezerResponse = await fetch(`https://api.deezer.com/search?q=${query}`)
-
-  if (!deezerResponse.ok) throw new Error (`Deezer error: ${deezerResponse.status}`)
-  
-  const previewData = await deezerResponse.json()
-  const previewMp3Url = previewData.data[0]?.preview 
-  if (!previewMp3Url) throw new Error ('No results/preview is null')
-
   // os.tmpdir() returns the system temp folder (/var/folders/ on Mac)
   // path.join builds the full path: e.g. /tmp/abc123.mp3
   //these files dont exist yet, we are declaring them to use later
   const mp3Path = path.join(os.tmpdir(), `${memoryId}.mp3`)
   const wavPath = path.join(os.tmpdir(), `${memoryId}.wav`)
 
-  // makes an HTTP GET request to the Deezer CDN URL
-  // the response body is the raw MP3 audio bytes (not JSON this time)
-  const mp3Response = await fetch(previewMp3Url)
+  try {
+    const query = encodeURIComponent(`artist:"${artist}" track:"${song}"`)
+    const deezerResponse = await fetch(`https://api.deezer.com/search?q=${query}`)
 
-  if (!mp3Response.ok) throw new Error (`Failed to download preview: ${mp3Response.status} `)
+    if (!deezerResponse.ok) throw new Error (`Deezer error: ${deezerResponse.status}`)
+    
+    const previewData = await deezerResponse.json()
+    const previewMp3Url = previewData.data[0]?.preview 
+    if (!previewMp3Url) throw new Error (`No deezer results/preview is null for ${query}`)
 
-  // .arrayBuffer() reads the entire response body as raw bytes
-  // Buffer.from() wraps those bytes into a Node.js Buffer (which fs can write to disk)
-  //when we fetch the mp3 file from the internet, the result comes back as a stream of raw bytes 
-  //and array buffer is a low level javascript object that holds raw binary data
-  const buffer = Buffer.from(await mp3Response.arrayBuffer())
+    // makes an HTTP GET request to the Deezer CDN URL
+    // the response body is the raw MP3 audio bytes (not JSON this time)
+    const mp3Response = await fetch(previewMp3Url)
 
-  // writes the buffer (the MP3 file's bytes) to disk at /tmp/abc123.mp3
-  // now ffmpeg can read it as a real file
-  fs.writeFileSync(mp3Path, buffer)
+    if (!mp3Response.ok) throw new Error (`Failed to download preview: ${mp3Response.status} `)
 
-  if (!ffmpegStatic) throw new Error('ffmpeg binary not found — ffmpeg-static returned null')
+    // .arrayBuffer() reads the entire response body as raw bytes
+    // Buffer.from() wraps those bytes into a Node.js Buffer (which fs can write to disk)
+    //when we fetch the mp3 file from the internet, the result comes back as a stream of raw bytes 
+    //and array buffer is a low level javascript object that holds raw binary data
+    const buffer = Buffer.from(await mp3Response.arrayBuffer())
 
-  //ffmpeg converts mp3 to wav 
-  const ffmpegCommand = `"${ffmpegStatic}" -y -i "${mp3Path}" -ar 48000 "${wavPath}"`
-  await execAsync(ffmpegCommand)
+    // writes the buffer (the MP3 file's bytes) to disk at /tmp/abc123.mp3
+    // now ffmpeg can read it as a real file
+    fs.writeFileSync(mp3Path, buffer)
 
-  //delete mp3 temp file once ffmpeg is done with it 
-  fs.unlinkSync(mp3Path)
+    if (!ffmpegStatic) throw new Error('ffmpeg binary not found — ffmpeg-static returned null')
 
-  return wavPath
+    //ffmpeg converts mp3 to wav 
+    const ffmpegCommand = `"${ffmpegStatic}" -y -i "${mp3Path}" -ar 48000 "${wavPath}"`
+    await execAsync(ffmpegCommand)
+
+    //delete mp3 temp file once ffmpeg is done with it 
+    fs.unlinkSync(mp3Path)
+    return wavPath
+
+  } catch (error) {
+    //clean up any partial temp files before re-throwing 
+    if (fs.existsSync(mp3Path)) fs.unlinkSync(mp3Path)
+    if (fs.existsSync(wavPath)) fs.unlinkSync(wavPath)
+    console.error('[downloadAndConvertPreview error:', error)
+    throw error //rethrows error so the memories.ts route catch block still handles it 
+  }
 }
