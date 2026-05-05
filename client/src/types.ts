@@ -5,7 +5,7 @@ export interface MemoryTypes {
   album_name: string
   artist: string
   emotion: string 
-  season: string
+  season?: string
   year: number
   memory_fragment: string
   created_at: string

@@ -20,7 +20,7 @@ const [year, setYear] = useState<number | null >(null)
 const [searching, setSearching] = useState<boolean>(false)
 // const [searchingMessage, setSearchingMessage] = useState<string>('')
 const [submitting, setSubmitting] = useState<boolean>(false)
-const [submittingMessage, setSubmmittingMessage] = useState<string>('')
+const [submittingMessage, setSubmittingMessage] = useState<string>('')
 const [submittedMemory, setSubmittedMemory] = useState<MemoryTypes | null>(null)
 
 const getSongs = async () => {
@@ -54,8 +54,25 @@ const renderSongs = (searchResult: SearchResult[]) => {
 }
 
 const submitMemory = async () => {
-  if(!selectedSong || !year || !emotion || !season) return
-  setSubmitting(true)
+  if (!selectedSong) {
+    setSubmittingMessage('please select a song before submitting :)')
+    return
+  }
+
+  if (!year) {
+    setSubmittingMessage('please select a year before submitting :)')
+    return 
+  }
+
+  if (!emotion) {
+    setSubmittingMessage('please select a feeling before submitting :)')
+    return 
+  }
+
+  if (!memoryFragment) {
+    setSubmittingMessage('please enter a memory before submitting :)')
+    return 
+  }
 
   const memoryRequestObj = {
     song_id: selectedSong.song_id, 
@@ -71,11 +88,11 @@ const submitMemory = async () => {
   try {
     const newMemory = await createMemory(memoryRequestObj)
     setSubmittedMemory(newMemory)
-    setSubmmittingMessage('memory saved :)')
+    setSubmittingMessage('memory saved :)')
     handleRefresh()
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Error submitting memory'
-    setSubmmittingMessage(message)
+    setSubmittingMessage(message)
   } finally {
     setSubmitting(false)
   }
@@ -90,7 +107,7 @@ const handleRefresh = () => {
   setYear(null)
   setMemoryFragement('')
   // setSearchingMessage('')
-  setSubmmittingMessage('')
+  setSubmittingMessage('')
 }
 
   return (
@@ -169,7 +186,7 @@ const handleRefresh = () => {
             </button>
           </div>
           )}
-        {submittingMessage && <p>{submittingMessage}</p>}
+        {submittingMessage && <p className={styles['submitting-message']}>{submittingMessage}</p>}
       </div>
     </>
   )
