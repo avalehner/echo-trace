@@ -46,9 +46,9 @@ const PlayMemoryPage = () => {
     try {
       setIsDecoding(true)
       const decoded = await decodeSong(memoryId)
+      console.log('decoded', decoded)
       const rawJson = JSON.stringify(decoded)
       const encodedCharLength = rawJson.length 
-      console.log('decoded', decoded)
       setDecodedMemory(decoded)
       setEncodedCharCount(encodedCharLength)
       const fullText = `feeling: ${decoded.emotion}, ` + `season: ${decoded.season} ` + `${decoded.year}, ` + `memory: ${decoded.memory_fragment}`
