@@ -28,7 +28,7 @@ def encode_voice (wav_path, json_string):
   )
 
   mixResult = subprocess.run(
-    ["ffmpeg", "-y", "-i", wav_path, "-i",  voice_wav_path, "-filter_complex", "[0:a]volume=0.8[s];[1:a]volume=1.3[v];[s][v]amix=inputs=2:duration=first[out]", "-map", "[out]", f"{mixed_wav_path}"], 
+    ["ffmpeg", "-y", "-i", wav_path, "-i",  voice_wav_path, "-filter_complex", "[0:a]volume=0.8[s];[1:a]volume=1.5[v];[s][v]amix=inputs=2:duration=first[out]", "-map", "[out]", f"{mixed_wav_path}"], 
     capture_output=True, 
     text=True, 
     check=True, 
