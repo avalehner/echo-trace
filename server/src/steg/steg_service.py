@@ -4,6 +4,7 @@ import os
 import base64
 from flask import Flask, request, jsonify 
 from encoder import encode 
+from encode_voice import encode_voice
 from decoder import decode 
 import ssl 
 
@@ -11,6 +12,41 @@ import ssl
 steg_service = Flask(__name__) #__name__ is a built in python variable that holds the name of the current module. when the file is imported by another file __name__ is set to that filename
 
 #encoder route
+@steg_service.route('/encode_voice', methods=['POST'])
+def encode_voice_route(): 
+  try: 
+    json_string = request.json.get('json_string') #memory data to hide in the audio
+    wav_path = request.json.get('wav_path') #dev: shared filesystem path 
+    wav_base64 = request.json.get('wav_base64') # prod: base64-encoded WAV bytes 
+
+    if wav_base64: 
+      #production path: decode base64, write temp WAV, encode, return encoded as base 64 
+      tmp_path = f'/tmp/encode_input_{os.urandom(8).hex()}.wav' # generate a unique temp file path on Flask's container
+      #os.random(8).hex() gives a random 16-char hex string to avoid collisions 
+      
+      #with is python equivalent of fs.openSync(path, 'w') in js 
+      with open(tmp_path, 'wb') as f: #'wb' = write binary - writes those bytes as a WAV file to flask
+        f.write(base64.b64decode(wav_base64)) #converst the base64 string back to raw bytes 
+
+      output_filename, interval  = encode_voice(tmp_path, json_string) #call the existing enode function, saves encoded wav to tmp
+
+      #delete the original temp WAV 
+      os.remove(tmp_path)
+
+      with open(output_filename, 'rb') as f: #read encoded wav bytes back from disk 
+        encoded_base64 = base64.b64encode(f.read()).decode('utf-8') #converts bytes to base64 bytes, .decode('uts-8')
+      
+      #delete encoded temp WAV, we've read it to memory no longer need it on disk 
+      os.remove(output_filename)
+
+      return jsonify({ 'encoded_base64': encoded_base64, 'interval': interval }) #return encoded wave as base64 
+    else: 
+      # local dev: flask and express share the same filesystem, path works directly 
+      output_filename, interval = encode_voice(wav_path, json_string)
+      return jsonify({ 'output_path': output_filename, 'interval': interval }) #python dictionary being converted to JSON
+  except Exception as e: #equivalent of catch(error)
+    return jsonify({ 'error': str(e) }), 500 # str(e) converts the error to a string like error.message; sets status code to 500
+
 @steg_service.route('/encode', methods=['POST'])
 def encode_route(): 
   try: 
