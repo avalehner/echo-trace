@@ -28,7 +28,7 @@ def encode_voice_route():
       with open(tmp_path, 'wb') as f: #'wb' = write binary - writes those bytes as a WAV file to flask
         f.write(base64.b64decode(wav_base64)) #converst the base64 string back to raw bytes 
 
-      output_filename, interval  = encode_voice(tmp_path, json_string) #call the existing enode function, saves encoded wav to tmp
+      output_filename = encode_voice(tmp_path, json_string) #call the existing enode function, saves encoded wav to tmp
 
       #delete the original temp WAV 
       os.remove(tmp_path)
@@ -39,11 +39,11 @@ def encode_voice_route():
       #delete encoded temp WAV, we've read it to memory no longer need it on disk 
       os.remove(output_filename)
 
-      return jsonify({ 'encoded_base64': encoded_base64, 'interval': interval }) #return encoded wave as base64 
+      return jsonify({ 'encoded_base64': encoded_base64 }) #return encoded wave as base64 
     else: 
       # local dev: flask and express share the same filesystem, path works directly 
-      output_filename, interval = encode_voice(wav_path, json_string)
-      return jsonify({ 'output_path': output_filename, 'interval': interval }) #python dictionary being converted to JSON
+      output_filename = encode_voice(wav_path, json_string)
+      return jsonify({ 'output_path': output_filename }) #python dictionary being converted to JSON
   except Exception as e: #equivalent of catch(error)
     return jsonify({ 'error': str(e) }), 500 # str(e) converts the error to a string like error.message; sets status code to 500
 
