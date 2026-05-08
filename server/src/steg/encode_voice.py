@@ -37,5 +37,5 @@ def encode_voice (wav_path, json_string):
   return mixed_wav_path
 
 
-if __name__ == "__main__": 
-  print(encode_voice('../audio/9e051be7-fcda-4c6a-bdc3-68f88120f0e1.wav', '{"emotion": "sad", "memory_fragment": "test"}'))
+# if __name__ == "__main__": 
+#   print(encode_voice('../audio/9e051be7-fcda-4c6a-bdc3-68f88120f0e1.wav', '{"emotion": "sad", "memory_fragment": "test"}'))
