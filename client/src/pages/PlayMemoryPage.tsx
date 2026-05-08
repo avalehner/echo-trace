@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
-import type { MemoryTypes, DecodedMemoryTypes } from '../types'
+import type { MemoryTypes } from '../types'
 import { getMemoryById } from '../services/memoriesService'
 // import MemoryLog from '../components/MemoryLog'
 import { generateEncodedSong, decodeSong } from '../services/memoriesService'
@@ -11,11 +11,12 @@ const PlayMemoryPage = () => {
   const [memory, setMemory] = useState<MemoryTypes | null>(null)
   const [encodedSongUrl, setEncodedSongUrl] = useState<string | null>(null)
   const [isEncoding, setIsEncoding] = useState<boolean>(false)
-  const [isDecoding, setIsDecoding] = useState<boolean>(false)
-  const [decodedMemory, setDecodedMemory] = useState<DecodedMemoryTypes | null>(null)
+  // const [isDecoding, setIsDecoding] = useState<boolean>(false)
+  // const [decodedMemory, setDecodedMemory] = useState<DecodedMemoryTypes | null>(null)
   const [displayedText, setDisplayedText] = useState<string>('')
   const [fullDecodedText, setFullDecodedText] = useState<string>('')
   const [encodedCharCount, setEncodedCharCount] = useState<number | null>(null)
+  const [voiceLayer, setVoiceLayer] =useState<boolean>(false)
 
   const { id } = useParams()
 
@@ -27,37 +28,23 @@ const PlayMemoryPage = () => {
 
   if (!memory) return null 
 
-  const handleEncodedSong = async (memoryId: string) => {
+  const handleEncodedSong = async (memoryId: string, isVoice: boolean) => {
     try {
       setIsEncoding(true)
       await new Promise(resolve => setTimeout(resolve, 1500)) //makes async/await sleep for a duration
-      const url = await generateEncodedSong(memoryId)
+      const url = await generateEncodedSong(memoryId, isVoice)
       setEncodedSongUrl(url)
-      handleDecodeMessage(memoryId)
+      const decoded = await decodeSong(memoryId)
+      const rawJson = JSON.stringify(decoded)
+      const encodedCharLength = rawJson.length 
+      setEncodedCharCount(encodedCharLength)
+      const fullText = `feeling: ${decoded.emotion}, ` + `season: ${decoded.season} ` + `${decoded.year}, ` + `memory: ${decoded.memory_fragment}`
+      setFullDecodedText(fullText)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error' 
       console.error(message)
     } finally {
       setIsEncoding(false)
-    }
-  }
-
-  const handleDecodeMessage = async (memoryId: string) => {
-    try {
-      setIsDecoding(true)
-      const decoded = await decodeSong(memoryId)
-      console.log('decoded', decoded)
-      const rawJson = JSON.stringify(decoded)
-      const encodedCharLength = rawJson.length 
-      setDecodedMemory(decoded)
-      setEncodedCharCount(encodedCharLength)
-      const fullText = `feeling: ${decoded.emotion}, ` + `season: ${decoded.season} ` + `${decoded.year}, ` + `memory: ${decoded.memory_fragment}`
-      setFullDecodedText(fullText)
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown Error'
-      console.error(message)
-    } finally {
-      setIsDecoding(false)
     }
   }
 
@@ -114,27 +101,43 @@ const PlayMemoryPage = () => {
           <p className={styles['artist']}>{memory.artist}</p>
         </div>
       </div>
-      {!encodedSongUrl &&(
-      <button className={`${styles['play-memory-page-btn']} ${styles['encode-btn']}`} onClick={()=> handleEncodedSong(memory.id)} >encode your memory</button>)}
+      {(!encodedSongUrl || isEncoding) &&(
+        <div className={styles['encode-btn-container']}>
+          <label className={styles['toggle']}>
+            <span className={styles["toggle-label"]}>secret message</span>
+            <input
+              type="checkbox"
+              checked={voiceLayer}
+              onChange={(e) => setVoiceLayer(e.target.checked)}
+              className={styles["toggle-input"]}
+            />
+            <span className={styles["toggle-slider"]} />
+            <span className={styles["toggle-label"]}>spoken message</span>
+          </label>
+          <button 
+            className={`${styles['play-memory-page-btn']} ${styles['encode-btn']}`} 
+              onClick={()=> handleEncodedSong(memory.id, voiceLayer)} >
+                encode your memory
+          </button>
+        </div>
+      )}
       {isEncoding && <p className={styles['encoding-text']}>encoding your memory...</p>}
-      {encodedSongUrl && !decodedMemory && !isDecoding && <p className={styles['decode-instructions']}>press play to decode your memory!</p>}
-      {encodedSongUrl && (
+      {!isEncoding && encodedSongUrl && <p className={styles['decode-instructions']}>press play to decode your memory!</p>}
+      {!isEncoding && encodedSongUrl && (
         <div className={styles['audio-player-container']}>
           {/* The ontimeupdate event occurs when the play time of a media changes. The ontimeupdate event occurs while the media is playing.The ontimeupdate event occurs when the user moves the play position. */}
           <audio 
             className={styles['audio-player']}
             controls src={encodedSongUrl} 
-            onPlay={() =>!decodedMemory && handleDecodeMessage(memory.id)}
             onTimeUpdate={handleTimeUpdate}/>
-          {/* {wavesurfer} */}
-          <div className={styles['decoded-msg-container']}>
-            <p className={styles['decode-msg-label']}>decoded message:</p>
-            <p className={styles['decoded-msg-text']}>{displayedText}</p>
-          </div>
         </div>
       )}
+      {!isEncoding && !voiceLayer && encodedSongUrl && <div className={styles['decoded-msg-container']}>
+        <p className={styles['decode-msg-label']}>decoded message:</p>
+        <p className={styles['decoded-msg-text']}>{displayedText}</p>
+      </div>}
     </div> 
-      {encodedSongUrl && 
+      {encodedSongUrl && !isEncoding && 
         <button className={styles['download-link-btn']}>
           <a 
           className={styles['download-link']}
