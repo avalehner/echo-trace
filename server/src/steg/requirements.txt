@@ -1,3 +1,4 @@
 flask 
 numpy 
-gunicorn
+gunicorn #WSGI HTTP server, runs flask server in production 
+edge-tts
