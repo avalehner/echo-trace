@@ -14,6 +14,7 @@ const memoriesRouter = Router()
 memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
   try {
     const { id } = req.params 
+    const isVoice = req.query.voice === 'true'
     const dbResponse = await pool.query(`
       SELECT *
       FROM memories 
@@ -29,9 +30,17 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
     }
 
     //if this memory has already been encoded return stored R2 URL, dont need to re-encode 
-    if (memoryData.encoded_audio_url?.startsWith('http')) {
-      res.status(200).json({url: memoryData.encoded_audio_url})
-      return 
+
+    if (isVoice) {
+      if (memoryData.voice_audio_url?.startsWith('http')) {
+        res.status(200).json({url: memoryData.voice_audio_url})
+        return 
+      }
+    } else {
+      if (memoryData.encoded_audio_url?.startsWith('http')) {
+        res.status(200).json({url: memoryData.encoded_audio_url})
+        return 
+      }
     }
 
     //extract song data from memory data 
@@ -55,9 +64,10 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
       memory_fragment: memoryData.memory_fragment, 
     })
 
-    const r2Key = `${memoryId}_encoded.wav` // the key (filename) this file will have in R2
+    const r2Key = isVoice ? `${memoryId}_voice.wav` : `${memoryId}_encoded.wav` // the key (filename) this file will have in R2
+    let voice_audio_url: string 
     let encodedAudioUrl: string 
-    let encodeInterval: number  
+    let encodeInterval: number | null = null
 
     if (process.env.NODE_ENV === 'production') {
       //production: express and flask are on separate containers, can't share file paths 
@@ -67,7 +77,9 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
       //.toString('base64') converts those raw bytes to a base64 string (safe to send in JSON)
       const wavBase64 = fs.readFileSync(wavFilePath).toString('base64')
 
-      const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
+      const encodeFetchUrl = isVoice ? `${process.env.FLASK_URL}/encode_voice` : `${process.env.FLASK_URL}/encode`
+
+      const encoderResponse = await fetch(encodeFetchUrl, {
         method: 'POST', 
         headers: { 'Content-Type': 'application/json'}, 
         body: JSON.stringify({ wav_base64: wavBase64, json_string: memoryJsonString })
@@ -78,6 +90,7 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
 
       //Flask returns the encoded WAV as a base64 string 
       const { encoded_base64, interval } = await encoderResponse.json()
+      if (!isVoice) encodeInterval = interval 
 
       //grab encode interval 
       encodeInterval = interval 
@@ -97,7 +110,9 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
 
     } else {
       //development: flask and express share file system 
-      const encoderResponse = await fetch(`${process.env.FLASK_URL}/encode`, {
+      const encodeFetchUrl = isVoice ? `${process.env.FLASK_URL}/encode_voice` : `${process.env.FLASK_URL}/encode`
+
+      const encoderResponse = await fetch(encodeFetchUrl, {
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify({
@@ -127,12 +142,16 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
       encodedAudioUrl = await uploadToR2(output_path, r2Key)
     }
 
-    await pool.query(`
-      UPDATE memories 
-      SET encoded_audio_url = $1,  
-      encode_interval = $2 
-      WHERE id = $3
-    `, [encodedAudioUrl, encodeInterval, memoryId])
+    //add url to db 
+    const updateQuery = isVoice 
+      ? `UPDATE memories SET voice_audio_url = $1 WHERE id = $2` 
+      : `UPDATE memories SET encoded_audio_url = $1, encode_interval = $2 WHERE id = $3`
+
+    const updateParams = isVoice 
+      ? [encodedAudioUrl, memoryId]
+      : [encodedAudioUrl, encodeInterval, memoryId]
+
+    await pool.query(updateQuery, updateParams)
 
     //return the URL so frontend can play it directly from R2 
     res.status(200).json({ url: encodedAudioUrl })
