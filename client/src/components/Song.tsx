@@ -9,6 +9,7 @@ interface SelectedSongTypes {
 const Song = ({ song, className }: SelectedSongTypes) => {
   return (
     <div className={styles[className]}> 
+      <p>{song.song_name}</p>
       <p>{song.album_name}</p>
       <p>{song.artist}</p>
     </div>
