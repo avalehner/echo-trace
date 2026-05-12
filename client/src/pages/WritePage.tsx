@@ -3,17 +3,17 @@ import { useNavigate } from "react-router"
 import EmotionMenu from "../components/EmotionMenu"
 import SeasonMenu from "../components/SeasonMenu"
 import YearMenu from "../components/YearMenu"
-import SelectedSong from "../components/SelectedSong"
+import Song from "../components/Song"
 import styles from './css/WritePage.module.css'
 import { searchSongs } from "../services/spotifyService" 
 import { createMemory } from "../services/memoriesService"
-import type { SearchResult, MemoryTypes } from "../types"
+import type { SongSearchResult, MemoryTypes } from "../types"
 
 const WritePage = () => {
 const navigate = useNavigate()
 const [searchQuery, setSearchQuery] = useState<string>('')
-const [searchResults, setSearchResults] = useState<SearchResult[]>([])
-const [selectedSong, setSelectedSong] = useState<SearchResult | null>(null)
+const [searchResults, setSearchResults] = useState<SongSearchResult[]>([])
+const [selectedSong, setSelectedSong] = useState<SongSearchResult | null>(null)
 const [emotion, setEmotion] = useState<string>('')
 const [season, setSeason] = useState<string>('')
 const [memoryFragment, setMemoryFragement] = useState<string>('')
@@ -38,18 +38,16 @@ const getSongs = async () => {
   }
 }
 
-const handleSelectedSong = (song: SearchResult) => {
+const handleSelectedSong = (song: SongSearchResult) => {
   setSelectedSong(song)
   setSearchResults([])
 }
 
-const renderSongs = (searchResult: SearchResult[]) => {
+const renderSongs = (searchResult: SongSearchResult[]) => {
   return searchResult.map((songResult)=> (
-    <div key={songResult.song_id} className={styles['song-result']} onClick={()=> handleSelectedSong(songResult)}>
-      <p>{songResult.song_name}</p>
-      <p>{songResult.album_name}</p>
-      <p>{songResult.artist}</p>
-    </div>
+      <div key={songResult.song_id} onClick={()=> handleSelectedSong(songResult)}>
+        <Song song={songResult} className={'song-result'} />
+      </div>  
     )
   )
 }
@@ -111,6 +109,8 @@ const handleRefresh = () => {
   setSubmittingMessage('')
 }
 
+  console.log(selectedSong)
+
   return (
     <>
       <div className={styles['write-page-container']}>
@@ -137,13 +137,7 @@ const handleRefresh = () => {
               </div>}
             {/* {searchingMessage && <p>{searchingMessage}</p>} */}
             <div className={selectedSong ? styles['selected-song-container'] : styles['song-results-container']}>
-              {selectedSong 
-              ? <SelectedSong 
-                  songName={selectedSong.song_name}
-                  albumName={selectedSong.album_name}
-                  artist={selectedSong.artist}
-                /> 
-              : (renderSongs(searchResults))}
+              {selectedSong ? <Song className={'selected-song-result'} song={selectedSong}/> : renderSongs(searchResults)}
             </div>
             <div className={styles['emotion-menu-container']}>
               <p>listening to this song made me feel</p>

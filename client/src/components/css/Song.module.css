@@ -1,0 +1,70 @@
+/* ─── Individual song result row ─────────────────────────────── */
+
+.song-result {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid rgba(186, 153, 128, 0.55);
+  /* cursor: pointer; */
+  transition: background 0.15s ease;
+}
+
+.song-result:hover {
+  background: rgba(245, 239, 224, 0.3);
+}
+
+.song-result p {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  margin: 0;
+  letter-spacing: 0.03em;
+  line-height: 1.7;
+  padding: 0; 
+}
+
+.song-result p:first-child {
+  color: #2a1000;
+  font-weight: 500;
+}
+
+.song-result p:nth-child(2) {
+  color: #7a4a20;
+}
+
+.song-result p:nth-child(3) {
+  color: #b4538c;
+  /* color: #b02878; */
+}
+
+/* ─── Selected song ──────────────────────────────────────────── */
+
+.selected-song-result {
+  background: rgba(235, 255, 235, 0.5);
+  padding: 12px 14px;
+  border: 1px solid rgb(145, 180, 145); 
+  margin: 1.3rem 0 0; 
+  max-width: 200px; 
+}
+
+.selected-song-result p {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  margin: 0;
+  letter-spacing: 0.03em;
+  line-height: 1.7;
+  padding: 0; 
+}
+
+.selected-song-result p:first-child {
+  color: #2a1000;
+  font-weight: 500;
+}
+
+.selected-song-result p:nth-child(2) {
+  color: #7a4a20;
+}
+
+.selected-song-result p:nth-child(3) {
+  color: #b02878;
+}
