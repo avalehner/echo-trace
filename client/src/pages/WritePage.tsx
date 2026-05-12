@@ -3,6 +3,7 @@ import { useNavigate } from "react-router"
 import EmotionMenu from "../components/EmotionMenu"
 import SeasonMenu from "../components/SeasonMenu"
 import YearMenu from "../components/YearMenu"
+import SelectedSong from "../components/SelectedSong"
 import styles from './css/WritePage.module.css'
 import { searchSongs } from "../services/spotifyService" 
 import { createMemory } from "../services/memoriesService"
@@ -136,13 +137,13 @@ const handleRefresh = () => {
               </div>}
             {/* {searchingMessage && <p>{searchingMessage}</p>} */}
             <div className={selectedSong ? styles['selected-song-container'] : styles['song-results-container']}>
-              {selectedSong ? (
-                <div className={styles['selected-song-result']}>
-                  <p>{selectedSong.song_name}</p>
-                  <p>{selectedSong.album_name}</p>
-                  <p>{selectedSong.artist}</p>
-                </div>)  
-                : (renderSongs(searchResults))}
+              {selectedSong 
+              ? <SelectedSong 
+                  songName={selectedSong.song_name}
+                  albumName={selectedSong.album_name}
+                  artist={selectedSong.artist}
+                /> 
+              : (renderSongs(searchResults))}
             </div>
             <div className={styles['emotion-menu-container']}>
               <p>listening to this song made me feel</p>
