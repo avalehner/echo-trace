@@ -39,7 +39,7 @@ searchRouter.get('/', async (req:Request, res: Response) => {
       song_name: song.name, 
       artist: song.artists[0].name, 
       album_name: song.album.name, 
-      album_art: song.album.images[0].url
+      album_art: song.album.images?.[0]?.url ?? ''
     }))
 
     res.status(200)
