@@ -19,7 +19,7 @@
   padding: 1.5rem 2rem 3rem; 
 }
 
-.search-container {
+.search-container form{
   display: flex; 
   gap: 0.5rem; 
   justify-content: center; 

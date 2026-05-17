@@ -118,18 +118,20 @@ const handleRefresh = () => {
         {!submittedMemory ? 
           (<div className={styles['data-input-container']}>
             <div className={styles['search-container']}>
-              <input 
-                className={styles['text-input']}
-                type="text"
-                placeholder="enter title or artist"
-                value={searchQuery}
-                onChange={(e)=> setSearchQuery(e.target.value)}
-              />
-              <button className={styles['write-page-btn']} onClick={getSongs}>{searching ? 'searching' : 'SEARCH'}</button>
+              <form onSubmit={(e) => {e.preventDefault(); getSongs()}}>
+                <input 
+                  className={styles['text-input']}
+                  type="text"
+                  placeholder="enter title or artist"
+                  value={searchQuery}
+                  onChange={(e)=> setSearchQuery(e.target.value)}
+                />
+                <button type="submit" className={styles['write-page-btn']} onClick={getSongs}>{searching ? 'searching' : 'SEARCH'}</button>
+              </form>
             </div>
             {searchResults.length > 0 && 
               <div className={styles['refresh-btn-container']} >
-                <button 
+                <button   
                   className={styles['write-page-btn']} 
                   onClick={()=> handleRefresh()}>
                     REFRESH
