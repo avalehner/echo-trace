@@ -12,7 +12,7 @@
 .year-menu-container {
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   gap: 8px;
   padding: 6px 14px;
 }
@@ -21,7 +21,7 @@
 .season-menu-container select,
 .year-menu-container select {
   font-family: 'DM Mono', monospace;
-  font-weight: 100; 
+  font-weight: 100;
   font-size: 0.75rem;
   letter-spacing: 0.06em;
   color: #7a3a10;
@@ -51,7 +51,7 @@
 
 .reset-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 0.65rem; 
+  font-size: 0.65rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #7a3a10;
@@ -61,7 +61,9 @@
   padding: 8px 10px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .reset-btn:hover {
@@ -83,7 +85,8 @@
 
 /* ─── Empty state ────────────────────────────────────────────── */
 
-.empty-state, .no-memories {
+.empty-state,
+.no-memories {
   font-family: 'DM Mono', monospace;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
@@ -91,44 +94,42 @@
   padding: 24px 14px;
 }
 
-.no-memories{
-  text-align: center; 
+.no-memories {
+  text-align: center;
 }
 
 /* ─── Desktop (768px+) ───────────────────────────────────────── */
 
 @media (min-width: 768px) {
-
   .all-filters-container {
-    display: flex; 
-    justify-content: center; 
-    margin: 1.5rem 0; 
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
   }
 
   .emotion-menu-container,
   .season-menu-container,
   .year-menu-container {
-    display: inline-flex; 
+    display: inline-flex;
     border-bottom: none;
     border-right: 1px solid rgba(200, 160, 96, 0.2);
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
   }
 
   .memories-container {
-      display: grid; 
-      grid-template-columns: repeat(4, 1fr); 
-      max-width: 1400px; 
-      margin: 0 auto; 
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
-  .season-menu-container select, 
-  .year-menu-container select, 
+  .season-menu-container select,
+  .year-menu-container select,
   .emotion-menu-container select {
-    font-size: 0.85rem; 
+    font-size: 0.85rem;
   }
 
   .reset-btn {
-    font-size: 0.75rem; 
+    font-size: 0.75rem;
   }
-
 }

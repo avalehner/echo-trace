@@ -1,18 +1,24 @@
-import styles from './css/EmotionMenu.module.css'
+import styles from './css/EmotionMenu.module.css';
 
 interface EmotionMenuProps {
-  emotion: string, 
-  setEmotion: (value: string) => void 
+  emotion: string;
+  setEmotion: (value: string) => void;
 }
 
-const EmotionMenu = ({ emotion, setEmotion}: EmotionMenuProps) => {
+const EmotionMenu = ({ emotion, setEmotion }: EmotionMenuProps) => {
   return (
     <div className={styles['emotion-menu-container']}>
-      <select className={styles['emotion-menu']} value={emotion} onChange={(e)=> setEmotion(e.target.value)}>
-        <option value="" disabled>select feeling</option>
+      <select
+        className={styles['emotion-menu']}
+        value={emotion}
+        onChange={(e) => setEmotion(e.target.value)}
+      >
+        <option value="" disabled>
+          select feeling
+        </option>
         <option value="excited">excited</option>
         <option value="desperate">desperate</option>
-         <option value="curious">curious</option>
+        <option value="curious">curious</option>
         <option value="ethereal">ethereal</option>
         <option value="daring">daring</option>
         <option value="high">high</option>
@@ -40,7 +46,7 @@ const EmotionMenu = ({ emotion, setEmotion}: EmotionMenuProps) => {
         <option value="depressed">depressed</option>
       </select>
     </div>
-  )
-}
+  );
+};
 
-export default EmotionMenu
+export default EmotionMenu;

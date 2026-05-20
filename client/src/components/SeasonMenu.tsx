@@ -1,23 +1,28 @@
-import styles from './css/SeasonMenu.module.css'
+import styles from './css/SeasonMenu.module.css';
 
-interface SeasonMenuProps{
-  season: string
-  setSeason: (value:string) => void
+interface SeasonMenuProps {
+  season: string;
+  setSeason: (value: string) => void;
 }
 
-
-const SeasonMenu = ({season, setSeason}: SeasonMenuProps) => {
+const SeasonMenu = ({ season, setSeason }: SeasonMenuProps) => {
   return (
     <div className={styles['emotion-menu-container']}>
-      <select className={styles['emotion-menu']} value={season} onChange={(e) => setSeason(e.target.value)}>
-        <option value="" disabled>select season</option>
+      <select
+        className={styles['emotion-menu']}
+        value={season}
+        onChange={(e) => setSeason(e.target.value)}
+      >
+        <option value="" disabled>
+          select season
+        </option>
         <option value="spring">spring</option>
         <option value="summer">summer</option>
         <option value="fall">fall</option>
         <option value="winter">winter</option>
       </select>
     </div>
-  )
-}
+  );
+};
 
-export default SeasonMenu
+export default SeasonMenu;

@@ -1,16 +1,19 @@
-import type { MemoryTypes } from '../types'
-import styles from './css/MemoryLog.module.css'
-import { useNavigate } from 'react-router'
+import type { MemoryTypes } from '../types';
+import styles from './css/MemoryLog.module.css';
+import { useNavigate } from 'react-router';
 
 interface MemoryLogProps {
-  memory: MemoryTypes
+  memory: MemoryTypes;
 }
 
-const MemoryLog = ({ memory }: MemoryLogProps ) => {
-const navigate = useNavigate()
+const MemoryLog = ({ memory }: MemoryLogProps) => {
+  const navigate = useNavigate();
 
   return (
-    <div className={styles['memory-log-container']} onClick={() => navigate(`/listen/${memory.id}`)}>
+    <div
+      className={styles['memory-log-container']}
+      onClick={() => navigate(`/listen/${memory.id}`)}
+    >
       <div className={styles['song-container']}>
         <p>song name:</p>
         <p>{memory.song_name}</p>
@@ -40,7 +43,7 @@ const navigate = useNavigate()
         <p className={styles['truncate']}>{memory.memory_fragment}</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MemoryLog
+export default MemoryLog;

@@ -1,6 +1,6 @@
 .your-memory-container {
-  border-radius: 25px; 
-  margin: 1.5rem 1rem 0; 
+  border-radius: 25px;
+  margin: 1.5rem 1rem 0;
   padding: 0.3rem 0.5rem 2rem;
   background: rgba(245, 239, 224, 0.2);
 }
@@ -9,59 +9,60 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem; 
-  margin: 0.7rem 0 0; 
+  gap: 0.5rem;
+  margin: 0.7rem 0 0;
 }
 
 .title {
-  text-align: center; 
-  color: #67310f; 
+  text-align: center;
+  color: #67310f;
   font-family: 'DM Mono', monospace;
-  font-weight: 100; 
+  font-weight: 100;
 }
 
 .refresh-btn {
-  border: none; 
-  color: #e684facc;  
+  border: none;
+  color: #e684facc;
   background-color: rgba(79, 74, 133, 0);
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .refresh-btn:hover {
-  color: #2b9a3166; 
+  color: #2b9a3166;
 }
 
 .song-item-container {
   display: grid;
   grid-template-columns: 1.1fr 4fr;
-  gap: 0rem; 
+  gap: 0rem;
 }
 
-.song-item-container p, 
+.song-item-container p,
 .encoding-text,
-.decode-instructions, 
-.decode-msg-label, 
-.decoded-msg-text, 
+.decode-instructions,
+.decode-msg-label,
+.decoded-msg-text,
 .toggle-label {
-  padding: 0.2rem 0; 
-  margin: 0; 
+  padding: 0.2rem 0;
+  margin: 0;
   font-family: 'DM Mono', monospace;
-  font-size: 0.8rem; 
+  font-size: 0.8rem;
 }
 
 .encoding-text {
-  margin-top: 0.5rem; 
+  margin-top: 0.5rem;
 }
 
 .song-info-container {
-  padding: 1rem; 
+  padding: 1rem;
   background: rgba(254, 232, 213, 0.5);
   /* border: 1px solid rgba(58, 48, 40, 0.3); */
   margin: 1rem 1rem 1rem;
-  border-radius: 20px; 
+  border-radius: 20px;
 }
 
-.play-memory-page-btn, .play-song-btn {
+.play-memory-page-btn,
+.play-song-btn {
   /* display: block; 
   margin: 0 auto;  */
   font-family: 'DM Mono', monospace;
@@ -75,16 +76,19 @@
   border-radius: 6px;
   padding: 8px 14px;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .button-container {
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-.play-memory-page-btn:hover, .download-link-btn:hover {
+.play-memory-page-btn:hover,
+.download-link-btn:hover {
   background: rgba(255, 227, 199, 0.8);
   /* border-color: rgba(58, 48, 40, 0.6); */
 }
@@ -97,87 +101,87 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;  
-  gap: 1rem; 
-
+  justify-content: center;
+  gap: 1rem;
 }
 
 .toggle-label {
-  color: #67310f; 
+  color: #67310f;
 }
 
 .encode-btn {
   /* display: flex; 
   justify-content: center;  */
-  margin: 0.5rem 0 0rem; 
+  margin: 0.5rem 0 0rem;
 }
 
 .encoding-text {
-  margin: 0rem 0 1.5rem; 
-  text-align: center; 
+  margin: 0rem 0 1.5rem;
+  text-align: center;
 }
 
 .audio-player-container {
-  display: flex; 
+  display: flex;
   flex-direction: column;
-  justify-content: center; 
-  margin-bottom: 1rem; 
-  width: 90%; 
-  margin: 0 auto; 
+  justify-content: center;
+  margin-bottom: 1rem;
+  width: 90%;
+  margin: 0 auto;
 }
 
 audio {
-  width: 300px; 
-  margin: 1rem auto 1rem; 
+  width: 300px;
+  margin: 1rem auto 1rem;
 }
 
-.decode-instructions{
-  text-align: center; 
+.decode-instructions {
+  text-align: center;
   margin: 1.5 rem 0 0.5rem;
 }
 
-.decoded-msg-container{
-  padding: 1rem; 
+.decoded-msg-container {
+  padding: 1rem;
   background: rgba(254, 232, 213, 0.5);
   cursor: pointer;
   /* border: 1px solid rgba(58, 48, 40, 0.3); */
   margin: 1rem;
-  border-radius: 20px; 
+  border-radius: 20px;
   color: #7a3a10;
   font-family: 'DM Mono', monospace;
 }
 
-.decode-msg-label, .decoded-msg-text {
-  margin: 0.5rem 0; 
-  padding: 0; 
+.decode-msg-label,
+.decoded-msg-text {
+  margin: 0.5rem 0;
+  padding: 0;
 }
 
 .download-link-btn {
-  border: none; 
-  display: flex; 
-  justify-content: center; 
-  width: 68%; 
-  margin: 1.5rem auto 4rem; 
-  border-radius: 6px; 
-  padding: 0.5rem 0.8rem; 
+  border: none;
+  display: flex;
+  justify-content: center;
+  width: 68%;
+  margin: 1.5rem auto 4rem;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
   background: rgba(254, 232, 213, 0.5);
 }
 
 .download-link {
-  text-decoration: none; 
-  text-align: center; 
+  text-decoration: none;
+  text-align: center;
   font-family: 'DM Mono', monospace;
-  font-size: 0.8rem; 
-  font-weight: 100; 
+  font-size: 0.8rem;
+  font-weight: 100;
   color: #7a3a10;
 }
 
 /* text */
 
-.song-item-container p:first-child, 
+.song-item-container p:first-child,
 .encoding-text,
-.decode-instructions, 
-.decode-msg-label, 
+.decode-instructions,
+.decode-msg-label,
 .decoded-msg-text {
   color: #7a3a10;
 }
@@ -204,7 +208,6 @@ audio {
   align-items: center;
   gap: 20px;
   cursor: pointer;
-
 }
 
 .toggle-input {
@@ -223,7 +226,7 @@ audio {
 }
 
 .toggle-slider::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 2px;
   left: 2px;
@@ -235,11 +238,11 @@ audio {
 }
 
 .toggle-input:checked + .toggle-slider {
-  background: #2b9a3166; ;  /* green when on */
+  background: #2b9a3166; /* green when on */
 }
 
 .toggle-input:checked + .toggle-slider::before {
-  transform: translateX(16px);  /* slide the knob */
+  transform: translateX(16px); /* slide the knob */
 }
 
 .toggle-input:focus-visible + .toggle-slider {
@@ -247,52 +250,51 @@ audio {
   outline-offset: 2px;
 }
 
-
 @media (min-width: 768px) {
   .download-link-btn {
     box-shadow: 1px 1px 20px 2px rgba(109, 91, 173, 0.2);
   }
 
   .your-memory-container {
-    width: 600px; 
-    margin: 1rem auto 0; 
+    width: 600px;
+    margin: 1rem auto 0;
   }
 
   .song-info-container {
-    padding: 1.2rem 1.7rem; 
-    width: 430px; 
-    margin: 1rem auto 1.5rem; 
+    padding: 1.2rem 1.7rem;
+    width: 430px;
+    margin: 1rem auto 1.5rem;
   }
 
-  .song-item-container p, 
-  .encoding-text, 
-  .decode-instructions, 
+  .song-item-container p,
+  .encoding-text,
+  .decode-instructions,
   .decoded-msg-container p {
-  font-size: 0.8rem; 
+    font-size: 0.8rem;
   }
-  
+
   .decode-instructions {
-    padding: 0; 
-    margin: 0.5rem 0 1.5rem; 
+    padding: 0;
+    margin: 0.5rem 0 1.5rem;
   }
 
   .decoded-msg-container {
-    width: 430px; 
-    margin: 1.5rem auto 2rem; 
-    padding: 1.2rem 1.7rem; 
+    width: 430px;
+    margin: 1.5rem auto 2rem;
+    padding: 1.2rem 1.7rem;
   }
 
-  .play-memory-page-btn { 
+  .play-memory-page-btn {
     padding: 10px 18px;
-    font-size: 0.8rem; 
+    font-size: 0.8rem;
   }
 
   .download-link-btn {
-    margin-top: 2rem; 
-    width: 300px; 
+    margin-top: 2rem;
+    width: 300px;
   }
 
   audio {
-    margin: 0.3rem auto 0.4rem; 
+    margin: 0.3rem auto 0.4rem;
   }
 }

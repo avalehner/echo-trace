@@ -3,8 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
 
 .nav-bar {
-
-  padding: 1.5rem 0 1rem; 
+  padding: 1.5rem 0 1rem;
 }
 
 .nav-bar ul {
@@ -31,7 +30,9 @@
   padding: 12px 14px;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .nav-bar li a:hover {
