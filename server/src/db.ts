@@ -1,12 +1,12 @@
-import { Pool } from 'pg'
+import { Pool } from 'pg';
 
 const pool = new Pool({
-  user: process.env.DB_USER, 
-  password: process.env.DB_PASSWORD, 
-  host: process.env.DB_HOST, 
-  port: Number(process.env.DB_PORT), 
-  database: process.env.DB_NAME, 
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false //required for supabase 
-})
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  database: process.env.DB_NAME,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false, //required for supabase
+});
 
-export default pool 
+export default pool;
