@@ -10,9 +10,6 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import 'dotenv/config';
 import ffmpegStatic from 'ffmpeg-static';
 
-console.log('R2_ACCOUNT_ID:', process.env.R2_ACCOUNT_ID);
-console.log('R2_ACCESS_KEY_ID:', process.env.R2_ACCESS_KEY_ID);
-
 //create R2 client
 const r2Client = new S3Client({
   region: 'auto', //lets CloudFlare handle the region
