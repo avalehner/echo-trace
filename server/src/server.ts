@@ -2,8 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import type { Express } from 'express';
 import cors from 'cors';
-import memoriesRouter from './routes/memories';
-import searchRouter from './routes/search';
+import memoriesRouter from './routes/memories.ts';
+import searchRouter from './routes/search.ts';
 
 const app: Express = express();
 
@@ -16,6 +16,8 @@ app.use('/api/memories', memoriesRouter);
 app.use('/api/search', searchRouter);
 
 //server
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
+const PORT = process.env.PORT;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

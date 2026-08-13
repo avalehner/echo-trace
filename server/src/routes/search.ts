@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import type { Request, Response } from 'express';
-import type { SpotifyTrack, TrackResult } from '../types';
+import type { SpotifyTrack, TrackResult } from '../types.ts';
 
 const searchRouter = Router();
 

@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import type { Request, Response } from 'express';
-import pool from '../db';
+import pool from '../db.ts';
 import {
   downloadWavYtDlp,
   audioDir,
   downloadAndConvertPreview,
   uploadToR2,
-} from '../services/audioService';
+} from '../services/audioService.ts';
 import fs from 'fs';
 import path from 'path';
 import { validate } from 'uuid';
