@@ -1,6 +1,6 @@
 import type { MemoryTypes, NewMemoryTypes, MemoryFiltersTypes, DecodedMemoryTypes } from '../types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 export const getMemories = async (filters?: MemoryFiltersTypes): Promise<MemoryTypes[]> => {
   const params = new URLSearchParams(); //built in browser API specifically designed for building query strings. handles all the formatting and encoding (adding ? = & etc) and encodes special characters
