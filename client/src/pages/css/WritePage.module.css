@@ -124,6 +124,15 @@
   margin: 1.4rem 0 1.8rem;
 }
 
+.instructions {
+  text-align: center;
+  color: #0b4209;
+  font-family: 'DM Mono', monospace;
+  font-weight: 100;
+  margin: 1.4rem 0 1.8rem;
+  font-size: 1rem;
+}
+
 .emotion-menu-container p,
 .season-menu-container p {
   font-family: 'DM Mono', monospace;
