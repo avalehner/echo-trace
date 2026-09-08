@@ -113,7 +113,7 @@ const WritePage = () => {
   return (
     <>
       <div className={styles['write-page-container']}>
-        <h1 className={styles['title']}>echo-trace</h1>
+        <h1 className={styles['title']}>EchoTrace</h1>
         {!submittedMemory ? (
           <div className={styles['data-input-container']}>
             <div className={styles['search-container']}>

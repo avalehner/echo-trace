@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router';
 import WritePage from './pages/WritePage';
 import ExplorePage from './pages/ExplorePage';
+import AboutPage from './pages/AboutPage';
 import PlayMemoryPage from './pages/PlayMemoryPage';
 import NavBar from './components/NavBar';
 
@@ -11,6 +12,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<WritePage />} />
         <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/listen/:id" element={<PlayMemoryPage />} />
       </Routes>
     </>

@@ -11,6 +11,9 @@ const NavBar = () => {
         <li>
           <NavLink to="/explore">VIEW ALL MEMORIES</NavLink>
         </li>
+        <li>
+          <NavLink to="/about">ABOUT</NavLink>
+        </li>
       </ul>
     </nav>
   );

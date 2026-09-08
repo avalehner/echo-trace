@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+.about-page-container {
+  font-family: 'DM Mono', monospace;
+  color: rgb(68, 31, 7);
+  width: 1200px;
+  max-width: calc(100% - 250rem);
+  min-width: 1000px;
+  margin: 0 auto;
+  letter-spacing: 0.06em;
+  line-height: 1.6rem;
+}
+
+.title {
+  text-align: center;
+  font-weight: 400;
+  margin: 4rem 0 2.5rem;
+  font-size: 1.5rem;
+}
+
+.about-page-container p {
+  font-size: 1rem;
+  margin: 1rem 0 1.5rem;
+  padding: 0;
+}
+
+.instructions-container {
+  border-radius: 25px;
+  margin: 0;
+  padding: 1.5rem 3rem;
+  background: rgba(231, 231, 231, 0.35);
+}
+
+.instructions-container p {
+  color: #0b4209;
+}
+
+.pink {
+  color: #b02878;
+}
+
+.green {
+  color: #0b4209;
+}
+
+.purple {
+  color: #4f0867;
+}
+
+.orange {
+  color: '#a04a10';
+}
