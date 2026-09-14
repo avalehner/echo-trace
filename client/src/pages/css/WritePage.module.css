@@ -121,7 +121,7 @@
   color: #67310f;
   font-family: 'DM Mono', monospace;
   font-weight: 100;
-  margin: 1.4rem 0 1.8rem;
+  margin: 1.4rem 0 1.6rem;
 }
 
 .instructions {
@@ -129,14 +129,14 @@
   color: #0b4209;
   font-family: 'DM Mono', monospace;
   font-weight: 100;
-  margin: 1.4rem 0 1.8rem;
+  margin: 1.2rem 0 1.8rem;
   font-size: 0.95rem;
 }
 
 .emotion-menu-container p,
 .season-menu-container p {
   font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   letter-spacing: 0.06em;
   color: #492209;
   margin: 0;
