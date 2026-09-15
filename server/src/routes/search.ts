@@ -20,6 +20,13 @@ const getAccessToken = async () => {
   });
 
   const data = await spotifyResponse.json();
+
+  if (!spotifyResponse.ok) {
+    throw new Error(
+      `Spotify error: ${spotifyResponse.status} - ${data.error_description ?? data.error ?? 'Unknown error'}`
+    );
+  }
+
   return data.access_token;
 };
 

@@ -90,7 +90,8 @@ export const downloadAndConvertPreview = async (song: string, artist: string, me
   const wavPath = path.join(os.tmpdir(), `${memoryId}.wav`);
 
   try {
-    const query = encodeURIComponent(`artist:"${artist}" track:"${song}"`);
+    // const query = encodeURIComponent(`artist:"${artist}" track:"${song}"`);
+    const query = encodeURIComponent(`${artist} ${song}`);
     const deezerResponse = await fetch(`https://api.deezer.com/search?q=${query}`);
 
     if (!deezerResponse.ok) throw new Error(`Deezer error: ${deezerResponse.status}`);
