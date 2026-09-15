@@ -114,9 +114,11 @@ const WritePage = () => {
     <>
       <div className={styles['write-page-container']}>
         <h1 className={styles['title']}>EchoTrace</h1>
-        <p className={styles['instructions']}>
-          Search for a song and submit your memory to generate an encoded .wav file!
-        </p>
+        {!submittedMemory && (
+          <p className={styles['instructions']}>
+            Search for a song and submit your memory to generate an encoded .wav file!
+          </p>
+        )}
         {!submittedMemory ? (
           <div className={styles['data-input-container']}>
             <div className={styles['search-container']}>
@@ -133,7 +135,7 @@ const WritePage = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button type="submit" className={styles['write-page-btn']} onClick={getSongs}>
+                <button type="submit" className={styles['write-page-btn']}>
                   {searching ? 'searching' : 'SEARCH'}
                 </button>
               </form>

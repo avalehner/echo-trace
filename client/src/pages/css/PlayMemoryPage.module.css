@@ -2,7 +2,8 @@
   border-radius: 25px;
   margin: 1.5rem 1rem 0;
   padding: 0.3rem 0.5rem 2rem;
-  background: rgba(245, 239, 224, 0.2);
+  background: rgba(245, 239, 224, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .title-container {

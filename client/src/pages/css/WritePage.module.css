@@ -10,7 +10,8 @@
   border-radius: 25px;
   margin: 0 1rem;
   padding: 1.2rem 0 1.5rem;
-  background: rgba(245, 239, 224, 0.3);
+  background: rgba(245, 239, 224, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .after-submit-btns-container {
@@ -129,8 +130,8 @@
   color: #0b4209;
   font-family: 'DM Mono', monospace;
   font-weight: 100;
-  margin: 1.2rem 0 1.8rem;
-  font-size: 0.95rem;
+  margin: 1.2rem 0.7rem 1.8rem;
+  font-size: 0.9rem;
 }
 
 .emotion-menu-container p,
@@ -269,6 +270,10 @@
   .data-input-container {
     width: 600px;
     margin: 0 auto;
+  }
+
+  .instructions {
+    font-size: 0.95rem;
   }
 
   .text-input {
