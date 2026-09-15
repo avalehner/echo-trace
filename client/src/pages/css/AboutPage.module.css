@@ -24,14 +24,20 @@
   padding: 0;
 }
 
-.instructions-container {
+.instructions-container,
+.about-container,
+.steganography-container {
   border-radius: 25px;
   margin: 0;
-  padding: 1.5rem 3rem;
+  padding: 1rem 2rem;
   background: rgba(231, 231, 231, 0.35);
 }
 
-.instructions-container p {
+.steganography-container {
+  margin-bottom: 8rem;
+}
+
+.about-c .instructions-container p {
   color: #0b4209;
 }
 
@@ -49,4 +55,39 @@
 
 .orange {
   color: '#a04a10';
+}
+
+@media (max-width: 767px) {
+  .about-page-container {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    padding: 0 1.25rem 3rem;
+    line-height: 1.45rem;
+  }
+
+  .title {
+    margin: 2.5rem 0 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .about-page-container p {
+    margin: 0.75rem 0 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .instructions-container {
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+  }
+
+  .instructions-container p {
+    margin: 0.5rem 0 1rem;
+  }
+
+  .instructions-container p:last-child {
+    margin-bottom: 0.5rem;
+  }
 }
