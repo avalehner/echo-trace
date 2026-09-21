@@ -31,11 +31,13 @@ Lastly, the website also features an 'explore page' where you can browse submiss
 
 ## Stack 
 
-Echotrace was built with a Typescript/React + Vite frontend and a Node.js/Express backend for the web component. The encoding and decoding logic is handled with a separate Python flask server. This was done to give myself experience working with Python/flask, and also due to the built in python methods for working with .wav files. 
+Echotrace was built with a Typescript/React + Vite frontend and a Node.js/Express backend for the web component. The encoding and decoding logic is handled with a separate Python, Flask, and NumPy service that embeds extracts memory data by manipulating audio bits, intentionally producing an audio distortion. This was done to give myself experience working with Python/flask, and also due to the built in python methods for working with .wav files. The audio player is built with WaveSurfer.js for waveform visualization. 
 
 PostgreSQL with parameterized SQL queries and connection pooling stores memories, song metadata, and generated audio URLs.
 
 The music produced from this site is sourced from [Deezer Search API](https://developers.deezer.com/login?redirect=/api) which provides a 30 second song sample that is then used to encode the users memories. Cloudflare R2 was used to store the encoded .wav files and serves them through public URLs. Uploading to R2 is handled by AWS S3. 
+
+For spoken memories Edge TTS generates narration and FFmpeg converts audio and layers the spoken memory into the .wav file. 
 
 ## URL 
 
