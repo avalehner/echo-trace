@@ -12,7 +12,7 @@ Echotrace uses a form of 'broken' steganography to accomplish its goal of encodi
 
 ## How to use
 
-On the home screen the user can search for and select a song (using the [Spotify Search API](https://developer.spotify.com/documentation/web-api/reference/search). From there the user can select an emotion, time period (season/year) and input a short memory that they associate with the song. 
+On the home screen the user can search for and select a song (using the [Spotify Search API](https://developer.spotify.com/documentation/web-api/reference/search)). From there the user can select an emotion, time period (season/year) and input a short memory that they associate with the song. 
 
 <p align="center"><img width="1509" height="820" alt="image" src="https://github.com/user-attachments/assets/26a854ea-6f06-4b7f-bb27-8eb3bda294ed" /></p>
 
