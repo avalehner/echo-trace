@@ -45,6 +45,7 @@ def encode_voice_route():
       output_filename = encode_voice(wav_path, json_string)
       return jsonify({ 'output_path': output_filename }) #python dictionary being converted to JSON
   except Exception as e: #equivalent of catch(error)
+    steg_service.logger.exception('Voice encoding failed')
     return jsonify({ 'error': str(e) }), 500 # str(e) converts the error to a string like error.message; sets status code to 500
 
 @steg_service.route('/encode', methods=['POST'])

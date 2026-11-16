@@ -93,7 +93,11 @@ memoriesRouter.get('/:id/download', async (req: Request, res: Response) => {
         //send the base64 WAV and the memory JSON to Flask
       });
 
-      if (!encoderResponse.ok) throw new Error(`Encoder error: ${encoderResponse.status}`);
+      if (!encoderResponse.ok) {
+        const errorBody = await encoderResponse.text();
+        console.error('Flask encode error:', errorBody);
+        throw new Error(`Encoder error: ${encoderResponse.status} - ${errorBody}`);
+      }
 
       //Flask returns the encoded WAV as a base64 string
       const { encoded_base64, interval } = await encoderResponse.json();
