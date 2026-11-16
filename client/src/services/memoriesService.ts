@@ -56,8 +56,12 @@ export const deleteMemory = async (id: string): Promise<MemoryTypes> => {
 
 export const generateEncodedSong = async (id: string, isVoice: boolean): Promise<string> => {
   const response = await fetch(`${API_URL}/api/memories/${id}/download?voice=${isVoice}`);
-  if (!response.ok)
-    throw new Error(`Server error (generateEncodedSong memoriesService.ts): ${response.status}`);
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    const message = data?.error || `Server error: ${response.status}`;
+    console.error('generateEncodedSong failed:', message);
+    throw new Error(message);
+  }
   const data = await response.json();
   console.log('encode response data:', data);
   return data.url; //R2 public URL

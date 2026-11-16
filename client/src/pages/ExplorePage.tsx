@@ -9,12 +9,17 @@ import styles from './css/ExplorePage.module.css';
 
 const ExplorePage = () => {
   const [memories, setMemories] = useState<MemoryTypes[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [emotion, setEmotion] = useState<string>('');
   const [season, setSeason] = useState<string>('');
   const [year, setYear] = useState<number | null>(null);
 
   useEffect(() => {
+    let active = true;
     const fetchMemories = async () => {
+      setLoading(true);
+      setError(null);
       const filters: MemoryFiltersTypes = {};
       if (emotion) filters.emotion = emotion;
       if (season) filters.season = season;
@@ -22,13 +27,19 @@ const ExplorePage = () => {
 
       try {
         const data = await getMemories(filters);
-        setMemories(data);
+        if (active) setMemories(data);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
         console.error(message);
+        if (active) setError('Unable to load memories. Please try again.');
+      } finally {
+        if (active) setLoading(false);
       }
     };
     fetchMemories();
+    return () => {
+      active = false;
+    };
   }, [emotion, season, year]);
 
   const renderMemories = () => {
@@ -67,7 +78,15 @@ const ExplorePage = () => {
           </div>
         </div>
         <div className={styles['memories-container']}>
-          {memories.length === 0 ? (
+          {loading ? (
+            <p className={styles['no-memories']} role="status">
+              loading memories…
+            </p>
+          ) : error ? (
+            <p className={styles['no-memories']} role="alert">
+              {error}
+            </p>
+          ) : memories.length === 0 ? (
             <p className={styles['no-memories']}>no memories found </p>
           ) : (
             renderMemories()
