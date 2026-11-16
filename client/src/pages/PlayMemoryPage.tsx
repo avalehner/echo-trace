@@ -157,10 +157,14 @@ const PlayMemoryPage = () => {
             </div>
           </div>
         )}
-        {!isEncoding && !voiceLayer && encodedSongUrl && (
+        {!isEncoding && encodedSongUrl && (
           <div className={styles['decoded-msg-container']}>
             <p className={styles['decode-msg-label']}>decoded message:</p>
-            <p className={styles['decoded-msg-text']}>{displayedText}</p>
+            <p className={styles['decoded-msg-text']}>
+              {voiceLayer
+                ? `feeling: ${memory.emotion}, season: ${memory.season} ${memory.year}, memory: ${memory.memory_fragment}`
+                : displayedText}
+            </p>
           </div>
         )}
         {/* {!isEncoding && encodedSongUrl && <button className={styles['play-memory-page-btn']} onClick={handleRefresh}>REFRESH</button>} */}
