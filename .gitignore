@@ -28,6 +28,7 @@ server/src/audio
 #python bytecode cache files 
 __pycache__/
 *.pyc
+.venv/
 
 #todo 
 to-do.txt
